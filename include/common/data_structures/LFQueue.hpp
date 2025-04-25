@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include <atomic>
-#include "utils.hpp"
+#include "../common.hpp"
 
-namespace utils
+namespace common::data_structures
 {
     template<typename T>
     class LFQueue final
@@ -64,7 +64,7 @@ namespace utils
     void LFQueue<T>::updateReadIndex() noexcept
     {
         _nextReadIndex = (_nextReadIndex + 1) % _data.size();
-        utils::assert(_size != 0, "Read an invalid element");
+        common::assert(_size != 0, "Read an invalid element");
         _size--;
     }
-} // namespace utils
+} // namespace common::data_structures

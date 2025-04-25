@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
-#include "../utils/utils.hpp"
+#include "../utils.hpp"
 
-namespace memory
+namespace utils::data_structures
 {
     template<typename T>
     class MemoryPool final

@@ -1,15 +1,15 @@
-#include "utils/logging/Logger.hpp"
-#include "utils/utils.hpp"
-#include "threading/thread_utils.hpp"
+#include "common/logging/Logger.hpp"
+#include "common/common.hpp"
+#include "common/threading/threading.hpp"
 
-namespace utils::logging
+namespace common::logging
 {
     Logger::Logger(const std::string& filename) : _filename(filename), _queue(LOG_QUEUE_SIZE), _running(true), _thread(nullptr)
     {
         _file.open(_filename);
-        utils::assert(_file.is_open(), "Could not open log file : " + _filename);
+        common::assert(_file.is_open(), "Could not open log file : " + _filename);
         _thread = threading::createAndStartThread(-1, "Logger", [this]() { flushQueue();});
-        utils::assert(_thread != nullptr, "Failed to start logger thread");
+        common::assert(_thread != nullptr, "Failed to start logger thread");
     }
 
     Logger::~Logger()
@@ -147,10 +147,10 @@ namespace utils::logging
                 }
                 else
                 {
-                    utils::fatal("Missing arguments to Logger::log()");
+                    common::fatal("Missing arguments to Logger::log()");
                 }
             }
             pushValue(*s++);
         }
     }
-} // namespace utils::log
+} // namespace common::log

@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
-namespace utils::logging
+
+namespace common::logging
 {
     enum class LogType : int8_t
     {
@@ -14,4 +15,4 @@ namespace utils::logging
         FLOAT = 7,
         DOUBLE = 8
     };
-} // namespace utils::log
+} // namespace common::log

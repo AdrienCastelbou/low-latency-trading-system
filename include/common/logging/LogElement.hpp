@@ -1,7 +1,7 @@
 #pragma once
 #include "LogType.hpp"
 
-namespace utils::logging
+namespace common::logging
 {
     struct LogElement
     {
@@ -20,4 +20,4 @@ namespace utils::logging
         } _u;
     };
     
-} // namespace utils::log
+} // namespace common::log

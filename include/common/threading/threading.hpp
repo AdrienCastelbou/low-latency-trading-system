@@ -9,7 +9,7 @@
 #include <mach/thread_act.h>
 #include <mach/thread_policy.h>
 
-namespace threading
+namespace common::threading
 {
     inline auto setThreadCore(int coreId) noexcept
     {

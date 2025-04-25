@@ -2,7 +2,7 @@
 #include <string>
 #include <iostream>
 
-namespace utils
+namespace common
 {
 
     inline void assert(bool cond, const std::string& msg) noexcept
@@ -20,4 +20,4 @@ namespace utils
         exit(EXIT_FAILURE);
     } 
 
-} // namespace utils
+} // namespace common

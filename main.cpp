@@ -1,12 +1,10 @@
-#include "include/utils/utils.hpp"
-#include "include/threading/thread_utils.hpp"
-#include "include/utils/time.hpp"
-#include "include/memory/MemoryPool.hpp"
-#include "include/utils/LFQueue.hpp"
-#include "include/utils/logging/Logger.hpp"
+#include "include/common/common.hpp"
+#include "include/common/time/time.hpp"
+#include "include/common/data_structures/LFQueue.hpp"
+#include "include/common/logging/Logger.hpp"
 
 
-using namespace utils;
+using namespace common;
 
   int main(int, char **) {
   char c = 'd';

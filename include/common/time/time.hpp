@@ -4,7 +4,7 @@
 #include <ctime>
 #include <string>
 
-namespace utils::time
+namespace common::time
 {
     using Nanos = int64_t;
     
@@ -30,4 +30,4 @@ namespace utils::time
         }
         return *timeStr;
     }
-} // namespace utils::time
+} // namespace common::time

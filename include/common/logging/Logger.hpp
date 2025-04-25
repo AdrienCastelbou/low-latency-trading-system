@@ -1,14 +1,16 @@
 #pragma once
 #include <string>
 #include <fstream>
-#include "../LFQueue.hpp"
+#include "../data_structures/LFQueue.hpp"
 #include "LogElement.hpp"
 #include <atomic>
 #include <thread>
 
-namespace utils::logging
+namespace common::logging
 {
     constexpr size_t LOG_QUEUE_SIZE = 8 * 1024 * 1024;
+
+    namespace ds = common::data_structures;
 
     class Logger final
     {
@@ -42,11 +44,11 @@ namespace utils::logging
         private:
             void flushQueue();
             
-            const std::string   _filename;
-            std::ofstream       _file;
-            utils::LFQueue<LogElement> _queue;
-            std::atomic_bool            _running;
-            std::thread* _thread;
+            const std::string       _filename;
+            std::ofstream           _file;
+            ds::LFQueue<LogElement> _queue;
+            std::atomic_bool        _running;
+            std::thread*            _thread;
     };
 
     template<typename T, typename... A>
@@ -69,6 +71,6 @@ namespace utils::logging
             }
             pushValue(*s++);
         }
-        utils::fatal("Extra arguments provided to Logger::log()");
+        common::fatal("Extra arguments provided to Logger::log()");
     }
-} // namespace utils::log
+} // namespace common::log
