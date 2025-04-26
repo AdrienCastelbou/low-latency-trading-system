@@ -2,7 +2,7 @@
 #include "include/common/time/time.hpp"
 #include "include/common/data_structures/LFQueue.hpp"
 #include "include/common/logging/Logger.hpp"
-
+#include "include/common/network/network.hpp"
 
 using namespace common;
 
