@@ -157,5 +157,4 @@ namespace common::network
         }
         return -1;
     }
-
 } // namespace common::network
