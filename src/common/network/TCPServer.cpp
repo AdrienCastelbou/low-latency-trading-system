@@ -177,6 +177,13 @@ namespace common::network
         return kevent(_kqfd, &ev, 1, nullptr, 0, nullptr) != -1;
     }
 
+    TCPServer::~TCPServer()
+    {
+        destroy();
+        std::for_each(_sockets.begin(), _sockets.end(), [](TCPSocket* socket) { delete socket; });
+        _sockets.clear();
+    }
+
     void TCPServer::destroy()
     {
         close(_kqfd);

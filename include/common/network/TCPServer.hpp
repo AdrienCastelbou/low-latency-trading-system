@@ -15,6 +15,7 @@ namespace common::network
         public:
             TCPServer() = delete;
             TCPServer(common::logging::Logger& logger);
+            ~TCPServer();
             TCPServer(const TCPServer &) = delete;
             TCPServer(const TCPServer &&) = delete;
             TCPServer &operator=(const TCPServer &) = delete;
