@@ -8,9 +8,8 @@ namespace common::network
 {    
     void TCPSocket::defaultRecvCallBack(TCPSocket* socket, common::time::Nanos rxTime) noexcept
     {
-        (void)socket;
         _logger.log("%:% %() % TCPSocket::defaultRecvCallBack() socket:% len:% rx:%\n",
-                    __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), _fd, _nextRcvValidIndex, rxTime);
+                    __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->getFd(), socket->getNextRcvValidIndex(), rxTime);
     }
 
     TCPSocket::TCPSocket(common::logging::Logger& logger) : _logger(logger)
@@ -100,6 +99,35 @@ namespace common::network
             memcpy(_sendBuffer + _nextSendValidIndex, data, len);
             _nextSendValidIndex += len;
         }
+    }
+
+    int TCPSocket::getFd() noexcept
+    {
+        return _fd;
+    }
+
+    size_t TCPSocket::getNextRcvValidIndex() noexcept
+    {
+        return _nextRcvValidIndex;
+    }
+
+    char* TCPSocket::getRcvBuffer() noexcept
+    {
+        return _rcvBuffer;
+    }
+    void TCPSocket::setFd(int fd) noexcept
+    {
+        _fd = fd;
+    }
+
+    void TCPSocket::setNextRcvValidIndex(size_t idx) noexcept
+    {
+        _nextRcvValidIndex = idx;
+    }
+
+    void TCPSocket::setRecvCallback(const std::function<void(TCPSocket* s, common::time::Nanos rxTime)>& callback) noexcept
+    {
+        _recvCallback = callback;
     }
 
 

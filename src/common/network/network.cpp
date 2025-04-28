@@ -67,7 +67,7 @@ namespace common::network
     bool setSOTimestamp(int fd)
     {
         int one = 1;
-        return setsockopt(fd, SOL_SOCKET, SO_TIMESTAMP, reinterpret_cast<void *>(one), sizeof(one)) != -1;
+        return setsockopt(fd, SOL_SOCKET, SO_TIMESTAMP, reinterpret_cast<void *>(&one), sizeof(one)) != -1;
     }
 
     int createSocket(common::logging::Logger& logger, const std::string& tIp, const std::string& iface,

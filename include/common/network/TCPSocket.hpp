@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <netdb.h>
 #include <functional>
-#include "common/time/time.hpp"
+#include "../time/time.hpp"
 
 namespace common::logging
 {
@@ -28,9 +28,18 @@ namespace common::network
             int connect(const std::string& ip, const std::string& iface, int port, bool isListening);
             bool sendAndRecv();
             void send(const void* data, size_t len) noexcept;
+            void destroy() noexcept;
+
+            int getFd() noexcept;
+            size_t getNextRcvValidIndex() noexcept;
+            char* getRcvBuffer() noexcept;
+            void setFd(int fd) noexcept;
+            void setNextRcvValidIndex(size_t idx) noexcept;
+            void setRecvCallback(const std::function<void(TCPSocket* s, common::time::Nanos rxTime)>& callback) noexcept;
+
         private:
             void defaultRecvCallBack(TCPSocket* socket, common::time::Nanos rxTime) noexcept;
-            void destroy() noexcept;
+            
             int _fd                     = -1;
             char* _sendBuffer           = nullptr;
             size_t _nextSendValidIndex  = 0;
