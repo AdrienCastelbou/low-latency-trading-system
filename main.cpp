@@ -5,6 +5,7 @@
 #include "include/common/network/network.hpp"
 #include "include/common/network/TCPSocket.hpp"
 #include "include/common/network/TCPServer.hpp"
+#include "include/common/types/OrderTypes.hpp"
 
 using namespace common;
 using namespace common::time;
