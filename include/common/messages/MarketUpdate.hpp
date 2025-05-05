@@ -20,4 +20,4 @@ namespace common::messages
         std::string toString() const;
       };
     #pragma pack(pop)
-} // namespace common::network::messages
+} // namespace common::messages

@@ -20,4 +20,4 @@ namespace common::messages
         << "]";
      return ss.str();
     }
-} // namespace common::network::messages
+} // namespace common::messages

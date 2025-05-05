@@ -21,4 +21,4 @@ namespace common::messages
     };
     #pragma pack(pop)
 
-} // namespace common::network::messages
+} // namespace common::messages
