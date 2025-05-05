@@ -1,7 +1,7 @@
-#include "common/network/messages/ClientRequest.hpp"
+#include "common/messages/ClientRequest.hpp"
 #include <sstream>
 
-namespace common::network::messages
+namespace common::messages
 {
     std::string ClientRequest::toString() const
     {

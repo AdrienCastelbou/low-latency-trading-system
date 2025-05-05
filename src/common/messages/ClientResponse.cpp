@@ -1,9 +1,9 @@
-#include "common/network/messages/ClientResponse.hpp"
+#include "common/messages/ClientResponse.hpp"
 #include <sstream>
 
 using namespace ::common::types;
 
-namespace common::network::messages
+namespace common::messages
 {
     std::string ClientResponse::toString() const
     {

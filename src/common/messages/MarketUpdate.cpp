@@ -1,9 +1,9 @@
-#include "common/network/messages/MarketUpdate.hpp"
+#include "common/messages/MarketUpdate.hpp"
 #include <sstream>
 
 using namespace ::common::types;
 
-namespace common::network::messages
+namespace common::messages
 {
     std::string MarketUpdate::toString() const
     {

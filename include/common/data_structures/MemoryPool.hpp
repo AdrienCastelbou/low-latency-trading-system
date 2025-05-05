@@ -1,8 +1,9 @@
 #pragma once
-#include <vector>
-#include "../utils.hpp"
 
-namespace utils::data_structures
+#include <vector>
+#include "../common.hpp"
+
+namespace common::data_structures
 {
     template<typename T>
     class MemoryPool final
@@ -32,7 +33,7 @@ namespace utils::data_structures
     template<typename T>
     MemoryPool<T>::MemoryPool(size_t n) : _data(n, {T(), true}), _nextFreeIdx(0)
     {
-        utils::assert(reinterpret_cast<const ObjBlock *>(&(_data[0]._object)) == &(_data[0]), "T object should be first member of ObjectBlock.");
+        common::assert(reinterpret_cast<const ObjBlock *>(&(_data[0]._object)) == &(_data[0]), "T object should be first member of ObjectBlock.");
     }
 
     template<typename T>
@@ -41,7 +42,7 @@ namespace utils::data_structures
     {
         auto objBlock = &_data[_nextFreeIdx];
 
-        utils::assert(objBlock->_isFree, "Expected free ObjectBlock at index:" + std::to_string(_nextFreeIdx));
+        common::assert(objBlock->_isFree, "Expected free ObjectBlock at index:" + std::to_string(_nextFreeIdx));
         T* obj = &(objBlock->_object);
         obj = new(obj) T(args...);
         objBlock->_isFree = false;
@@ -63,7 +64,7 @@ namespace utils::data_structures
             }
             if (_nextFreeIdx == iniFreeIdx) [[unlikely]]
             {
-                utils::fatal("Memory Pool out of space");
+                common::fatal("Memory Pool out of space");
             }
         }
     }
@@ -72,8 +73,8 @@ namespace utils::data_structures
     void MemoryPool<T>::deallocate(T* obj)
     {
         const auto objIndex = reinterpret_cast<ObjBlock*>(obj) - &_data[0];
-        utils::assert(objIndex >= 0 && static_cast<size_t>(objIndex) < _data.size(), "Element being deallocated does not belong to this Memory pool.");
-        utils::assert(!_data[objIndex]._isFree, "Expected in-use ObjectBlock at index:" + std::to_string(objIndex));
+        common::assert(objIndex >= 0 && static_cast<size_t>(objIndex) < _data.size(), "Element being deallocated does not belong to this Memory pool.");
+        common::assert(!_data[objIndex]._isFree, "Expected in-use ObjectBlock at index:" + std::to_string(objIndex));
         _data[objIndex]._isFree = true;
     }
 

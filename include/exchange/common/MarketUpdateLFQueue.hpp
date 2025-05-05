@@ -1,10 +1,10 @@
 #pragma once
 #include "../../common/data_structures/LFQueue.hpp"
-#include "../../common/network/messages/MarketUpdate.hpp"
+#include "../../common/messages/MarketUpdate.hpp"
 
-using namespace common::network::messages;
+using namespace common::messages;
 
 namespace exchange::common
 {
-    using ClientResponseLFQueue = ::common::data_structures::LFQueue<MarketUpdate>;
+    using MarketUpdateLFQueue = ::common::data_structures::LFQueue<MarketUpdate>;
 } // namespace exchange::common

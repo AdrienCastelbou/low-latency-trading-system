@@ -1,8 +1,8 @@
 #pragma once
 #include "../../common/data_structures/LFQueue.hpp"
-#include "../../common/network/messages/ClientResponse.hpp"
+#include "../../common/messages/ClientResponse.hpp"
 
-using namespace common::network::messages;
+using namespace common::messages;
 
 namespace exchange::common
 {

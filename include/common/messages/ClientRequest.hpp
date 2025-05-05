@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../../types/OrderTypes.hpp"
-#include "../../enums/ClientRequestType.hpp"
+#include "../types/OrderTypes.hpp"
+#include "../enums/ClientRequestType.hpp"
 
 using namespace common::types;
 
-namespace common::network::messages
+namespace common::messages
 {
     #pragma pack(push, 1)
     struct ClientRequest
