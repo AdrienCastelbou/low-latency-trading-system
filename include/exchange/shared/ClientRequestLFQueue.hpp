@@ -4,7 +4,7 @@
 
 using namespace common::messages;
 
-namespace exchange::common
+namespace exchange::shared
 {
-    using ClientRequestLFQueue = ::common::data_structures::LFQueue<ClientRequest>;
+    using ClientRequestLFQueue = common::data_structures::LFQueue<ClientRequest>;
 } // namespace exchange::common

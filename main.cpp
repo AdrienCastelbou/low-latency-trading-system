@@ -32,9 +32,9 @@ int main(int, char **) {
   logger = new Logger("exchange_main.log");
   std::signal(SIGINT, sig_handler);
   const int sleep_time = 100 * 1000;
-  exchange::common::ClientRequestLFQueue client_requests(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
-  exchange::common::ClientResponseLFQueue client_responses(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
-  exchange::common::MarketUpdateLFQueue market_updates(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
+  exchange::shared::ClientRequestLFQueue client_requests(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
+  exchange::shared::ClientResponseLFQueue client_responses(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
+  exchange::shared::MarketUpdateLFQueue market_updates(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
 
   std::string time_str;
   logger->log("%:% %() % Starting Matching Engine...\n",

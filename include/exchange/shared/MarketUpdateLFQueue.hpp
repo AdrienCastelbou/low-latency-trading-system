@@ -4,7 +4,7 @@
 
 using namespace common::messages;
 
-namespace exchange::common
+namespace exchange::shared
 {
-    using MarketUpdateLFQueue = ::common::data_structures::LFQueue<MarketUpdate>;
+    using MarketUpdateLFQueue = common::data_structures::LFQueue<MarketUpdate>;
 } // namespace exchange::common

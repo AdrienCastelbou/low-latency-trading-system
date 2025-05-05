@@ -1,9 +1,9 @@
 #pragma once
 
 #include <string>
-#include "../common/ClientRequestLFQueue.hpp"
-#include "../common/ClientResponseLFQueue.hpp"
-#include "../common/MarketUpdateLFQueue.hpp"
+#include "../shared/ClientRequestLFQueue.hpp"
+#include "../shared/ClientResponseLFQueue.hpp"
+#include "../shared/MarketUpdateLFQueue.hpp"
 #include <array>
 #include "OrderBookHashMap.hpp"
 
@@ -20,7 +20,7 @@ namespace common
     }
 } // namespace common::logging
 
-using namespace exchange::common;
+using namespace exchange::shared;
 using namespace common::messages;
 
 namespace exchange::matching_engine

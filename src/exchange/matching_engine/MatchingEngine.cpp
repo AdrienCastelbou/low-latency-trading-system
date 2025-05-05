@@ -1,14 +1,14 @@
 #include "exchange/matching_engine/MatchingEngine.hpp"
-#include "exchange/common/ClientRequestLFQueue.hpp"
-#include "exchange/common/ClientResponseLFQueue.hpp"
-#include "exchange/common/MarketUpdateLFQueue.hpp"
+#include "exchange/shared/ClientRequestLFQueue.hpp"
+#include "exchange/shared/ClientResponseLFQueue.hpp"
+#include "exchange/shared/MarketUpdateLFQueue.hpp"
 #include "common/logging/Logger.hpp"
 #include "common/time/time.hpp"
 #include "common/common.hpp"
 #include "common/threading/threading.hpp"
 #include "common/enums/ClientRequestType.hpp"
 
-using namespace exchange::common;
+using namespace exchange::shared;
 
 namespace exchange::matching_engine
 {
