@@ -2,10 +2,10 @@
 #include "common/logging/Logger.hpp"
 #include "common/time/time.hpp"
 #include "exchange/matching_engine/MatchingEngine.hpp"
-#include "exchange/matching_engine/constants/constants.hpp"
+#include "exchange/shared/constants/constants.hpp"
 #include "common/enums/ClientResponseType.hpp"
 
-namespace cnsts = exchange::matching_engine::constants;
+namespace cnsts = exchange::shared::constants;
 
 namespace exchange::matching_engine
 {

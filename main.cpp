@@ -8,7 +8,7 @@
 #include "include/common/types/OrderTypes.hpp"
 #include "include/exchange/matching_engine/MatchingEngine.hpp"
 #include <csignal>
-#include "include/exchange/matching_engine/constants/constants.hpp"
+#include "include/exchange/shared/constants/constants.hpp"
 #include <unistd.h>
 using namespace common;
 using namespace common::time;
@@ -32,9 +32,9 @@ int main(int, char **) {
   logger = new Logger("exchange_main.log");
   std::signal(SIGINT, sig_handler);
   const int sleep_time = 100 * 1000;
-  exchange::shared::ClientRequestLFQueue client_requests(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
-  exchange::shared::ClientResponseLFQueue client_responses(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
-  exchange::shared::MarketUpdateLFQueue market_updates(exchange::matching_engine::constants::MAX_CLIENT_UPDATES);
+  exchange::shared::ClientRequestLFQueue client_requests(exchange::shared::constants::MAX_CLIENT_UPDATES);
+  exchange::shared::ClientResponseLFQueue client_responses(exchange::shared::constants::MAX_CLIENT_UPDATES);
+  exchange::shared::MarketUpdateLFQueue market_updates(exchange::shared::constants::MAX_CLIENT_UPDATES);
 
   std::string time_str;
   logger->log("%:% %() % Starting Matching Engine...\n",
