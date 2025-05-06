@@ -52,6 +52,11 @@ namespace exchange::order_server
         std::this_thread::sleep_for(1s);
     }
 
+    void OrderServer::stop()
+    {
+        _run = false;
+    }
+
     void OrderServer::recvCallback(common::network::TCPSocket* socket, common::time::Nanos rxTime) noexcept
     {
         namespace msg = common::messages;

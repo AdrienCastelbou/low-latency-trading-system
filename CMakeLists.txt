@@ -14,7 +14,7 @@ file(GLOB_RECURSE HEADERS "include/*/*.hpp" "include/*/*/*.hpp" "include/*.hpp")
 
 add_library(trading_engine_lib STATIC ${SOURCES})
 target_include_directories(trading_engine_lib PRIVATE include)
-add_executable(trading_engine main.cpp)
+add_executable(trading_engine exchangeMain.cpp)
 target_link_libraries(trading_engine PRIVATE trading_engine_lib)
 
 
