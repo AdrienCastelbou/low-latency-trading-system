@@ -5,9 +5,17 @@
 #include <netinet/tcp.h>
 #include "common/logging/Logger.hpp"
 #include "common/time/time.hpp"
+#include <arpa/inet.h>
 
 namespace common::network
 {
+    int join(int fd, const std::string& ip)
+    {
+        const ip_mreq mreq = {{inet_addr(ip.c_str())}, {htonl(INADDR_ANY)}};
+        return setsockopt(fd, IPPROTO_IP, IP_ADD_MEMBERSHIP, reinterpret_cast<const char*>(&mreq), sizeof(mreq)) != -1;
+
+    }
+
     std::string getIfaceIP(const std::string& iface)
     {
         char buff[NI_MAXHOST] = {'\0'};

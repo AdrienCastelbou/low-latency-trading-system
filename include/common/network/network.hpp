@@ -21,7 +21,7 @@ namespace common::network
     bool setMcastTTL(int fd, int ttl);
     bool setTTL(int fd, int ttl);
     int join(int fd, const std::string& tIp, const std::string& iface, int port, bool isUDP, bool isBlocking, bool isListening, int ttl, bool needsSOTimestamp);
-
+    int join(int fd, const std::string& ip);
     int createSocket(common::logging::Logger& logger, const std::string& tIp, const std::string& iface,
                     int port, bool isUdp, bool isBlocking, bool isListening, int ttl, bool needsSOTimestamp);
     
