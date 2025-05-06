@@ -56,14 +56,14 @@ namespace exchange::order_server
     {
         namespace msg = common::messages;
         _logger.log("%:% %() % Received socket:% len:% rx:%\n",
-                    __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->getFd(), socket->getNextRcvValidIndex(), rxTime);
+                    __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->_fd, socket->_nextRcvValidIndex, rxTime);
         
-        if (socket->getNextRcvValidIndex() >= sizeof(msg::OMClientRequest))
+        if (socket->_nextRcvValidIndex >= sizeof(msg::OMClientRequest))
         {
             size_t i = 0;
             for (; i + sizeof(msg::OMClientRequest) <= sizeof(msg::OMClientRequest); i += sizeof(msg::OMClientRequest))
             {
-                auto request = reinterpret_cast<const msg::OMClientRequest *>(socket->getRcvBuffer() + i);
+                auto request = reinterpret_cast<const msg::OMClientRequest *>(socket->_rcvBuffer + i);
                 _logger.log("%:% %() % Received %\n",
                             __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), request->toString());
             
@@ -76,7 +76,7 @@ namespace exchange::order_server
                 {
                     _logger.log("%:% %() % Received ClientRequest from ClientId:% on different socket:% expected:%\n",
                                 __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr),
-                                request->_clientRequest._clientId, socket->getFd(), _cidTcpSocket[request->_clientRequest._clientId]->getFd());
+                                request->_clientRequest._clientId, socket->_fd, _cidTcpSocket[request->_clientRequest._clientId]->_fd);
                         continue;   
                 }
 
@@ -92,8 +92,8 @@ namespace exchange::order_server
                 ++nextExpSeqNum;
                 _fifoSequencer.addClientRequest(rxTime, request->_clientRequest);
             }
-            memcpy(socket->getRcvBuffer(), socket->getRcvBuffer() + i, socket->getNextRcvValidIndex() - i);
-            socket->setNextRcvValidIndex(socket->getNextRcvValidIndex() - i);
+            memcpy(socket->_rcvBuffer, socket->_rcvBuffer + i, socket->_nextRcvValidIndex - i);
+            socket->_nextRcvValidIndex -= i;
         }
     }
 

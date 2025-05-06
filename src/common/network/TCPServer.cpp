@@ -15,7 +15,7 @@ namespace common::network
     {
         _logger.log("%:% %() % TCPServer::defaultRecvCallback() socket:% len:% rx:%\n"
                     __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr),
-                    socket->getFd(), socket->getNextRcvValidIndex(), rxTime);
+                    socket->_fd, socket->_nextRcvValidIndex, rxTime);
     }
 
     void TCPServer::defaultRecvFinishedCallback() noexcept
@@ -74,12 +74,12 @@ namespace common::network
                 if (socket == &_listenerSocket)
                 {
                     _logger.log("%:% %() % kevent listener_socket:%\n",
-                                __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->getFd());
+                                __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->_fd);
                     haveNewConn = true;
                     continue;
                 }
                 _logger.log("%:% %() % EVFILT_READ socket:%\n",
-                            __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->getFd());
+                            __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->_fd);
                 
                 if(std::find(_receiveSockets.begin(), _receiveSockets.end(), socket) == _receiveSockets.end())
                 {
@@ -89,7 +89,7 @@ namespace common::network
             else if (event.filter == EVFILT_WRITE)
             {
                 _logger.log("%:% %() % EVFILT_WRITE socket:%\n",
-                            __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->getFd());
+                            __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->_fd);
                 if(std::find(_sendSockets.begin(), _sendSockets.end(), socket) == _sendSockets.end())
                 {
                     _sendSockets.push_back(socket);
@@ -99,7 +99,7 @@ namespace common::network
             if (event.flags & (EV_ERROR | EV_EOF))
             {
                 _logger.log("%:% %() % EPOLLERR socket:%\n",
-                            __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->getFd());
+                            __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->_fd);
                 if(std::find(_disconnectedSockets.begin(), _disconnectedSockets.end(), socket) == _disconnectedSockets.end())
                 {
                     _disconnectedSockets.push_back(socket);
@@ -119,7 +119,7 @@ namespace common::network
                     __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr));
         sockaddr_storage addr;
         socklen_t addr_len = sizeof(addr);
-        auto fd = accept(_listenerSocket.getFd(), reinterpret_cast<sockaddr *>(&addr), &addr_len);
+        auto fd = accept(_listenerSocket._fd, reinterpret_cast<sockaddr *>(&addr), &addr_len);
 
         if (fd == -1)
         {
@@ -130,8 +130,8 @@ namespace common::network
                     __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), fd);
 
         auto* socket = new TCPSocket(_logger);
-        socket->setFd(fd);
-        socket->setRecvCallback(_recvCallback);
+        socket->_fd = fd;
+        socket->_recvCallback = _recvCallback;
         common::assert(kqueueAdd(socket), "kevent() failed. error:" + std::string(std::strerror(errno)));
         if(std::find(_sockets.begin(), _sockets.end(), socket) == _sockets.end())
         {
@@ -158,7 +158,7 @@ namespace common::network
     bool TCPServer::kqueueAdd(TCPSocket* socket)
     {
         struct kevent ev{};
-        EV_SET(&ev, socket->getFd(), EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, socket);
+        EV_SET(&ev, socket->_fd, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, socket);
         return kevent(_kqfd, &ev, 1, nullptr, 0, nullptr) != -1;
     }
 
@@ -173,7 +173,7 @@ namespace common::network
     bool TCPServer::kqueueDel(TCPSocket* socket)
     {
         struct kevent ev;
-        EV_SET(&ev, socket->getFd(), EVFILT_READ, EV_DELETE, 0, 0, socket);
+        EV_SET(&ev, socket->_fd, EVFILT_READ, EV_DELETE, 0, 0, socket);
         return kevent(_kqfd, &ev, 1, nullptr, 0, nullptr) != -1;
     }
 

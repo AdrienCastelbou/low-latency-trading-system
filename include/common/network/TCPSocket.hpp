@@ -14,7 +14,7 @@ namespace common::network
 {
     constexpr size_t TCP_BUFFER_SIZE = 64 * 1024 * 1024;
 
-    class TCPSocket final
+    struct TCPSocket
     {
         public:
             TCPSocket() = delete;
@@ -30,14 +30,6 @@ namespace common::network
             void send(const void* data, size_t len) noexcept;
             void destroy() noexcept;
 
-            int getFd() noexcept;
-            size_t getNextRcvValidIndex() noexcept;
-            char* getRcvBuffer() noexcept;
-            void setFd(int fd) noexcept;
-            void setNextRcvValidIndex(size_t idx) noexcept;
-            void setRecvCallback(const std::function<void(TCPSocket* s, common::time::Nanos rxTime)>& callback) noexcept;
-
-        private:
             void defaultRecvCallBack(TCPSocket* socket, common::time::Nanos rxTime) noexcept;
             
             int _fd                     = -1;
