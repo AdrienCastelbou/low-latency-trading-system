@@ -6,6 +6,7 @@
 #include "../shared/MarketUpdateLFQueue.hpp"
 #include <array>
 #include "OrderBookHashMap.hpp"
+#include "../../common/logging/Logger.hpp"
 
 namespace common
 {
@@ -13,11 +14,6 @@ namespace common
     {
         struct ClientRequest; 
     } // namespace network::messages
-    
-    namespace logging
-    {
-        class Logger;   
-    }
 } // namespace common::logging
 
 using namespace exchange::shared;
@@ -31,7 +27,7 @@ namespace exchange::matching_engine
     {
         public:
             MatchingEngine() = delete;
-            MatchingEngine(ClientRequestLFQueue* clientRequests, ClientResponseLFQueue* clientResponses, MarketUpdateLFQueue* marketUpdates, ::common::logging::Logger& logger);
+            MatchingEngine(ClientRequestLFQueue* clientRequests, ClientResponseLFQueue* clientResponses, MarketUpdateLFQueue* marketUpdates);
             ~MatchingEngine();
             MatchingEngine(const MatchingEngine &)  = delete;
             MatchingEngine(const MatchingEngine &&) = delete;
@@ -47,13 +43,13 @@ namespace exchange::matching_engine
             void run() noexcept;
             void processClientRequest(const ClientRequest* clientRequest) noexcept;
 
-            OrderBookHashMap _tikcerOrderBook;
+            OrderBookHashMap _tickerOrderBook;
             ClientRequestLFQueue* _incomingRequests         = nullptr;
             ClientResponseLFQueue* _outgoingOGWResponses    = nullptr;
             MarketUpdateLFQueue* _ougoingMDUpdates          = nullptr;
             volatile bool _run                              = false;
             std::string _timeStr;
-            ::common::logging::Logger& _logger;
+            ::common::logging::Logger _logger;
 
     };
 } // namespace exchange::matching_engine

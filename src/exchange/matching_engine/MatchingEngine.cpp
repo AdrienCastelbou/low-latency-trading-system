@@ -12,13 +12,13 @@ using namespace exchange::shared;
 
 namespace exchange::matching_engine
 {
-    MatchingEngine::MatchingEngine(ClientRequestLFQueue* clientRequests, ClientResponseLFQueue* clientResponses, MarketUpdateLFQueue* marketUpdates, ::common::logging::Logger& logger)
+    MatchingEngine::MatchingEngine(ClientRequestLFQueue* clientRequests, ClientResponseLFQueue* clientResponses, MarketUpdateLFQueue* marketUpdates)
                                     : _incomingRequests(clientRequests), _outgoingOGWResponses(clientResponses), _ougoingMDUpdates(marketUpdates),
-                                    _logger(logger)
+                                    _logger(("exchange_matching_engine.log"))
     {
-        for (size_t i = 0; i < _tikcerOrderBook.size(); i++)
+        for (size_t i = 0; i < _tickerOrderBook.size(); i++)
         {
-            //_tikcerOrderBook[i] = new OrderBook(i, &_logger, this);
+            _tickerOrderBook[i] = new OrderBook(i, &_logger, this);
         }
     }
 
@@ -31,7 +31,7 @@ namespace exchange::matching_engine
         _incomingRequests = nullptr;
         _outgoingOGWResponses = nullptr;
         _ougoingMDUpdates = nullptr;
-        for (auto& orderBook : _tikcerOrderBook)
+        for (auto& orderBook : _tickerOrderBook)
         {
             (void) orderBook;
             delete orderBook;
@@ -73,7 +73,7 @@ namespace exchange::matching_engine
     {
         using namespace ::common::enums;
 
-        auto orderBook = _tikcerOrderBook[clientRequest->_tickerId];
+        auto orderBook = _tickerOrderBook[clientRequest->_tickerId];
         switch (clientRequest->_type)
         {
             case ClientRequestType::NEW:
