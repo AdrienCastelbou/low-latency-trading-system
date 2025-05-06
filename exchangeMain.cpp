@@ -39,7 +39,7 @@ int main(int, char**)
                 __FILE__, __LINE__, __FUNCTION__,
                 common::time::getCurrentTimeStr(&timeStr));
     
-    matchingEngine = new matching_engine::MatchingEngine(&clientRequests, &clientResponses, &marketUpdates, *logger);
+    matchingEngine = new matching_engine::MatchingEngine(&clientRequests, &clientResponses, &marketUpdates);
     matchingEngine->start();
     const std::string mktPubIface = "lo";
     const std::string snapPubIp = "233.252.14.1", incPubIp = "233.252.14.3";
