@@ -1,11 +1,11 @@
 #include "exchange/market_data/MarketDataPublisher.hpp"
-#include "exchange/shared/constants/constants.hpp"
+#include "common/constants/constants.hpp"
 #include "common/threading/threading.hpp"
 #include "common/time/time.hpp"
 
 namespace exchange::market_data
 {
-    namespace cnsts = exchange::shared::constants;
+    namespace cnsts = common::constants;
     using namespace common::data_structures;
 
     MarketDataPublisher::MarketDataPublisher(MarketUpdateLFQueue* marketUpdates, const std::string& iface, const std::string& snapshotIp, int snapshotPort, const std::string& incrementalIp, int incrementalPort)

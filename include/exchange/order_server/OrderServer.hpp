@@ -5,7 +5,7 @@
 #include "../../common/network/TCPServer.hpp"
 #include "../shared/ClientResponseLFQueue.hpp"
 #include "../shared/ClientRequestLFQueue.hpp"
-#include "../shared/constants/constants.hpp"
+#include "../../common/constants/constants.hpp"
 #include "../../common/logging/Logger.hpp"
 #include "FIFOSequencer.hpp"
 

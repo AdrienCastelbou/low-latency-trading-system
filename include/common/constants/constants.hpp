@@ -1,7 +1,7 @@
 #pragma once
 #include <uchar.h>
 
-namespace exchange::shared::constants
+namespace common::constants
 {
     constexpr size_t MAX_TICKERS        = 8;
     constexpr size_t MAX_CLIENT_UPDATES = 256 * 1024;

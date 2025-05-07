@@ -5,7 +5,7 @@
 namespace exchange::market_data
 {
     SnapshotSynthesizer::SnapshotSynthesizer(shared::MDPMarketUpdateLFQueue* marketUpdates, const std::string& iface, const std::string& snapshotIp, int snapshotPort)
-    : _snapshotMdUpdates(marketUpdates), _logger("exchange_snapshot_synthesizer.log"), _snapshotSocket(_logger), _orderPool(shared::constants::MAX_ORDER_IDS)
+    : _snapshotMdUpdates(marketUpdates), _logger("exchange_snapshot_synthesizer.log"), _snapshotSocket(_logger), _orderPool(constants::MAX_ORDER_IDS)
     {
         assert(_snapshotSocket.init(snapshotIp, iface, snapshotPort, false) >= 0, "Unable to create snapshot mcast socket. error:" + std::string(std::strerror(errno)));
     }

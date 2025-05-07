@@ -31,9 +31,9 @@ int main(int, char**)
     logger = new common::logging::Logger("exchange_main.log");
     signal(SIGINT, signalHandler);
     const int sleepTime = 100 * 1000;
-    shared::ClientRequestLFQueue clientRequests(shared::constants::MAX_CLIENT_UPDATES);
-    shared::ClientResponseLFQueue clientResponses(shared::constants::MAX_CLIENT_UPDATES);
-    common::data_structures::MarketUpdateLFQueue marketUpdates(shared::constants::MAX_MARKET_UPDATES);
+    shared::ClientRequestLFQueue clientRequests(common::constants::MAX_CLIENT_UPDATES);
+    shared::ClientResponseLFQueue clientResponses(common::constants::MAX_CLIENT_UPDATES);
+    common::data_structures::MarketUpdateLFQueue marketUpdates(common::constants::MAX_MARKET_UPDATES);
     std::string timeStr;
     logger->log("%:% %() % Starting Matching Engine...\n",
                 __FILE__, __LINE__, __FUNCTION__,

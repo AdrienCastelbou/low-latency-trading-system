@@ -3,7 +3,7 @@
 #include "../shared/MDPMarketUpdateLFQueue.hpp"
 #include "../../common/network/McastSocket.hpp"
 #include "../../common/messages/MarketUpdate.hpp"
-#include "../shared/constants/constants.hpp"
+#include "../../common/constants/constants.hpp"
 #include "../../common/time/time.hpp"
 #include "../../common/data_structures/MemoryPool.hpp"
 
@@ -29,7 +29,7 @@ namespace exchange::market_data
             volatile bool _run = false;
             std::string _timeStr;
             network::McastSocket _snapshotSocket;
-            std::array<std::array<messages::MarketUpdate*, shared::constants::MAX_ORDER_IDS>, shared::constants::MAX_TICKERS> _tickerOrders;
+            std::array<std::array<messages::MarketUpdate*, constants::MAX_ORDER_IDS>, constants::MAX_TICKERS> _tickerOrders;
             size_t _lastIncSeqNum = 0;
             time::Nanos _lastSnapshotTime = 0;
             data_structures::MemoryPool<messages::MarketUpdate> _orderPool;

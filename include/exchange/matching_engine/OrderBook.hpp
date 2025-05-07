@@ -17,7 +17,6 @@ namespace common::logging
     class Logger;
 } // namespace common::logging
 
-
 namespace exchange::matching_engine
 {
     class MatchingEngine;
