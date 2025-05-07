@@ -1,6 +1,6 @@
 #pragma once
 #include <functional>
-#include "../shared/MarketUpdateLFQueue.hpp"
+#include "../../common/data_structures/MarketUpdateLFQueue.hpp"
 #include "../shared/MDPMarketUpdateLFQueue.hpp"
 #include "../../common/logging/Logger.hpp"
 #include "../../common/network/McastSocket.hpp"
@@ -14,7 +14,7 @@ namespace exchange::market_data
     class MarketDataPublisher
     {
         public:
-            MarketDataPublisher(shared::MarketUpdateLFQueue* marketUpdates, const std::string& iface, const std::string& snapshotIp, int snapshotPort, const std::string& incrementalIp, int incrementalPort);
+            MarketDataPublisher(data_structures::MarketUpdateLFQueue* marketUpdates, const std::string& iface, const std::string& snapshotIp, int snapshotPort, const std::string& incrementalIp, int incrementalPort);
             ~MarketDataPublisher();
 
             void start();
@@ -22,7 +22,7 @@ namespace exchange::market_data
             void run() noexcept;
         private:
             size_t _nextIncSeqNum                               = 1;
-            shared::MarketUpdateLFQueue* _outgoingMdUpdates     = nullptr;
+            data_structures::MarketUpdateLFQueue* _outgoingMdUpdates     = nullptr;
             shared::MDPMarketUpdateLFQueue _snapshotMdUpdates;
             volatile bool _run = false;
             std::string _timeStr;

@@ -1,4 +1,4 @@
-# Low Latency Trading System
+# [WIP] Low Latency Trading System
 
 This project is inspired by **Building Low Latency Applications with C++** by Sourav Ghosh. It aims to explore the concepts and techniques required to build low latency applications through the development of a complete electronic trading system.
 

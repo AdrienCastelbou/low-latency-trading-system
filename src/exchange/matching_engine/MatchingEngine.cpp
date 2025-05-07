@@ -1,7 +1,7 @@
 #include "exchange/matching_engine/MatchingEngine.hpp"
 #include "exchange/shared/ClientRequestLFQueue.hpp"
 #include "exchange/shared/ClientResponseLFQueue.hpp"
-#include "exchange/shared/MarketUpdateLFQueue.hpp"
+#include "common/data_structures/MarketUpdateLFQueue.hpp"
 #include "common/logging/Logger.hpp"
 #include "common/time/time.hpp"
 #include "common/common.hpp"

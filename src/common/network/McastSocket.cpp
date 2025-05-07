@@ -18,36 +18,36 @@ namespace common::network
 
     int McastSocket::init(const std::string& ip, const std::string& iface, int port, bool isListening)
     {
-        _socketFd = common::network::createSocket(_logger, ip, iface, port, true, false, isListening, 0, false);
-        return _socketFd;
+        _fd = common::network::createSocket(_logger, ip, iface, port, true, false, isListening, 0, false);
+        return _fd;
     }
 
     bool McastSocket::join(const std::string& ip)
     {
-        return common::network::join(_socketFd, ip);
+        return common::network::join(_fd, ip);
     }
 
     void McastSocket::leave()
     {
-        close(_socketFd);
-        _socketFd = -1;
+        close(_fd);
+        _fd = -1;
     }
 
     bool McastSocket::sendAndRecv() noexcept
     {
-        const ssize_t nRcv = recv(_socketFd, _inboundData.data() + _nextRcvValidIndex, _inboundData.size() - _nextRcvValidIndex, MSG_DONTWAIT);
+        const ssize_t nRcv = recv(_fd, _inboundData.data() + _nextRcvValidIndex, _inboundData.size() - _nextRcvValidIndex, MSG_DONTWAIT);
 
         if (nRcv > 0)
         {
             _nextRcvValidIndex += nRcv;
-            _logger.log("%:% %() % read socket:% len :%\n", __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), _socketFd, _nextRcvValidIndex);
+            _logger.log("%:% %() % read socket:% len :%\n", __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), _fd, _nextRcvValidIndex);
             _recvCallback(this);
         }
 
         if (_nextSendValidIndex > 0)
         {
-            ssize_t nSent = ::send(_socketFd, _outboundData.data(), _nextSendValidIndex, MSG_DONTWAIT | MSG_NOSIGNAL);
-            _logger.log("%:% %() % send socket:% len :%\n", __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), _socketFd, nSent);
+            ssize_t nSent = ::send(_fd, _outboundData.data(), _nextSendValidIndex, MSG_DONTWAIT | MSG_NOSIGNAL);
+            _logger.log("%:% %() % send socket:% len :%\n", __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), _fd, nSent);
         }
         _nextSendValidIndex = 0;
         return nRcv > 0;

@@ -6,8 +6,9 @@
 namespace exchange::market_data
 {
     namespace cnsts = exchange::shared::constants;
+    using namespace common::data_structures;
 
-    MarketDataPublisher::MarketDataPublisher(shared::MarketUpdateLFQueue* marketUpdates, const std::string& iface, const std::string& snapshotIp, int snapshotPort, const std::string& incrementalIp, int incrementalPort)
+    MarketDataPublisher::MarketDataPublisher(MarketUpdateLFQueue* marketUpdates, const std::string& iface, const std::string& snapshotIp, int snapshotPort, const std::string& incrementalIp, int incrementalPort)
                                             : _outgoingMdUpdates(marketUpdates), _snapshotMdUpdates(cnsts::MAX_MARKET_UPDATES), _run(false), _logger("exchange_market_data_publisher.log"), _incrementalSocket(_logger)
     {
         assert(_incrementalSocket.init(incrementalIp, iface, incrementalPort, false) >= 0, "Unable to create incremental mcast socket. error:" + std::string(std::strerror(errno)));

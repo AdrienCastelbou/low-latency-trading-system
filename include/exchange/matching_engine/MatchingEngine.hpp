@@ -1,10 +1,10 @@
 #pragma once
 
 #include <string>
+#include <array>
 #include "../shared/ClientRequestLFQueue.hpp"
 #include "../shared/ClientResponseLFQueue.hpp"
-#include "../shared/MarketUpdateLFQueue.hpp"
-#include <array>
+#include "../../common/data_structures/MarketUpdateLFQueue.hpp"
 #include "OrderBookHashMap.hpp"
 #include "../../common/logging/Logger.hpp"
 
@@ -18,6 +18,7 @@ namespace common
 
 using namespace exchange::shared;
 using namespace common::messages;
+using namespace common::data_structures;
 
 namespace exchange::matching_engine
 {
@@ -49,7 +50,7 @@ namespace exchange::matching_engine
             MarketUpdateLFQueue* _ougoingMDUpdates          = nullptr;
             volatile bool _run                              = false;
             std::string _timeStr;
-            ::common::logging::Logger _logger;
+            common::logging::Logger _logger;
 
     };
 } // namespace exchange::matching_engine

@@ -20,7 +20,7 @@ namespace common::network
         bool sendAndRecv() noexcept;
         void send(const void* data, size_t len) noexcept;
 
-        int _socketFd = -1;
+        int _fd = -1;
 
         std::vector<char> _outboundData;
         size_t _nextSendValidIndex = 0;
