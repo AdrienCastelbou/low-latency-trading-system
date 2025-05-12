@@ -3,7 +3,7 @@
 
 namespace exchange::order_server
 {
-    OrderServer::OrderServer(shared::ClientRequestLFQueue* clientRequests, shared::ClientResponseLFQueue* clientResponses, const std::string& iface, int port)
+    OrderServer::OrderServer(ds::ClientRequestLFQueue* clientRequests, ds::ClientResponseLFQueue* clientResponses, const std::string& iface, int port)
     : _iface(iface), _port(port), _outgoingResp(clientResponses), _logger("exchange_order_server.log"), _tcpServer(_logger), _fifoSequencer(clientRequests, &_logger)
     {
         _cidNextOutgoingSeqNum.fill(1);

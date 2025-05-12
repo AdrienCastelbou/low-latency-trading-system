@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstddef>
-#include "../shared/ClientRequestLFQueue.hpp"
+#include "../../common/data_structures/ClientRequestLFQueue.hpp"
 #include "../../common/time/time.hpp"
 #include "../../common/messages/ClientRequest.hpp"
 
@@ -21,7 +21,7 @@ namespace exchange::order_server
     class FIFOSequencer final
     {
         public:
-            FIFOSequencer(shared::ClientRequestLFQueue* clientRequests, logging::Logger* logger);
+            FIFOSequencer(data_structures::ClientRequestLFQueue* clientRequests, logging::Logger* logger);
 
             void addClientRequest(time::Nanos rxTime, const messages::ClientRequest& request);
             void sequenceAndPublish();
@@ -37,7 +37,7 @@ namespace exchange::order_server
                 }
             };
             
-            shared::ClientRequestLFQueue* _incomingRequests = nullptr;
+            data_structures::ClientRequestLFQueue* _incomingRequests = nullptr;
             std::string _timeStr;
             logging::Logger* _logger;
             std::array<RecvTimeClienRequest, MAX_PRENDING_REQUESTS> _pendingClientRequests;

@@ -2,8 +2,8 @@
 
 #include <string>
 #include <array>
-#include "../shared/ClientRequestLFQueue.hpp"
-#include "../shared/ClientResponseLFQueue.hpp"
+#include "../../common/data_structures/ClientRequestLFQueue.hpp"
+#include "../../common/data_structures/ClientResponseLFQueue.hpp"
 #include "../../common/data_structures/MarketUpdateLFQueue.hpp"
 #include "OrderBookHashMap.hpp"
 #include "../../common/logging/Logger.hpp"
@@ -16,7 +16,6 @@ namespace common
     } // namespace network::messages
 } // namespace common::logging
 
-using namespace exchange::shared;
 using namespace common::messages;
 using namespace common::data_structures;
 

@@ -4,7 +4,9 @@
 
 namespace exchange::order_server
 {
-    FIFOSequencer::FIFOSequencer(shared::ClientRequestLFQueue* clientRequest, logging::Logger* logger)
+    namespace ds = common::data_structures;
+
+    FIFOSequencer::FIFOSequencer(ds::ClientRequestLFQueue* clientRequest, logging::Logger* logger)
                                 : _incomingRequests(clientRequest), _logger(logger)
     {
     }
