@@ -9,7 +9,7 @@ namespace trading::strategy
     struct MarketOrder
     {
         MarketOrder() = default;
-        MarketOrder(OrderId orderId, Side side, Price price, Qty qty, Priority priority);
+        MarketOrder(OrderId orderId, Side side, Price price, Qty qty, Priority priority, MarketOrder* prevOrder, MarketOrder* nextOrder) noexcept;
         
         std::string toString() const;
         

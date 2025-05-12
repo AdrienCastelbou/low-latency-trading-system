@@ -1,17 +1,18 @@
 #pragma once
 
 #include "common/types/OrderTypes.hpp"
+#include <sstream>
 
 namespace trading::strategy
 {
-    using common::types;
+    using namespace common::types;
 
     struct BBO
     {
         Price _bidPrice = PRICE_INVALID;
         Price _askPrice = PRICE_INVALID;
-        Quantity _bidQuantity = QUANTITY_INVALID;
-        Quantity _askQuantity = QUANTITY_INVALID;
+        Qty _bidQuantity = QTY_INVALID;
+        Qty _askQuantity = QTY_INVALID;
 
         std::string toString() const
         {
@@ -25,5 +26,5 @@ namespace trading::strategy
                 << "}";
             return ss.str();
         }
-    }
+    };
 }

@@ -2,8 +2,8 @@
 #include <sstream>
 namespace trading::strategy
 {
-    MarketOrder::MarketOrder(OrderId orderId, Side side, Price price, Qty qty, Priority priority)
-    : _orderId(orderId), _side(side), _price(price), _qty(qty), _priority(priority)
+    MarketOrder::MarketOrder(OrderId orderId, Side side, Price price, Qty qty, Priority priority, MarketOrder* prevOrder, MarketOrder* nextOrder) noexcept
+    : _orderId(orderId), _side(side), _price(price), _qty(qty), _priority(priority), _prevOrder(prevOrder), _nextOrder(nextOrder)
     {
     }
 

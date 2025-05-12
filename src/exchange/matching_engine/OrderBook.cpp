@@ -111,12 +111,12 @@ namespace exchange::matching_engine
         if (!ordersAtPrice)
         {
             order->_nextOrder = order->_prevOrder = order;
-            auto newOrdersAtPrice = _ordersAtPricePool.allocate(order->_side, order->_priority, order, nullptr, nullptr);
+            auto newOrdersAtPrice = _ordersAtPricePool.allocate(order->_side, order->_price, order, nullptr, nullptr);
             addOrdersAtPrice(newOrdersAtPrice);
         }
         else
         {
-            auto firstOrder                     = ordersAtPrice ? ordersAtPrice->_firstOrder : nullptr;
+            auto firstOrder                     = ordersAtPrice->_firstOrder;
             firstOrder->_prevOrder->_nextOrder  = order;
             order->_prevOrder                   = firstOrder->_prevOrder;
             order->_nextOrder                   = firstOrder;
