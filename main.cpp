@@ -5,7 +5,7 @@
 #include "include/common/network/network.hpp"
 #include "include/common/network/TCPSocket.hpp"
 #include "include/common/network/TCPServer.hpp"
-#include "include/common/types/OrderTypes.hpp"
+#include "include/common/types/types.hpp"
 #include "include/exchange/matching_engine/MatchingEngine.hpp"
 #include <csignal>
 #include "include/exchange/shared/constants/constants.hpp"

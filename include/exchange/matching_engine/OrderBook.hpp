@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../common/types/OrderTypes.hpp"
+#include "../../common/types/types.hpp"
 #include "../../common/messages/ClientResponse.hpp"
 #include "../../common/messages/MarketUpdate.hpp"
 #include "../../common/data_structures/MemoryPool.hpp"

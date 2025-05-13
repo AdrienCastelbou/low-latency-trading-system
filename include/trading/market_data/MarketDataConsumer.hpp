@@ -4,7 +4,7 @@
 #include "../../common/data_structures/MarketUpdateLFQueue.hpp"
 #include "../../common/logging/Logger.hpp"
 #include "../../common/network/McastSocket.hpp"
-#include "../../common/types/OrderTypes.hpp"
+#include "../../common/types/types.hpp"
 
 namespace common::messages
 {

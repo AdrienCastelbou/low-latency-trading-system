@@ -1,5 +1,5 @@
 #pragma once
-#include "../../common/types/OrderTypes.hpp"
+#include "../../common/types/types.hpp"
 #include "MarketOrder.hpp"
 
 namespace trading::strategy

@@ -3,7 +3,7 @@
 #include <functional>
 #include <string>
 #include "../../common/constants/constants.hpp"
-#include "../../common/types/OrderTypes.hpp"
+#include "../../common/types/types.hpp"
 #include "../../common/data_structures/ClientRequestLFQueue.hpp"
 #include "../../common/data_structures/ClientResponseLFQueue.hpp"
 #include "../../common/logging/Logger.hpp"

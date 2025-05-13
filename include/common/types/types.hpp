@@ -107,6 +107,15 @@ namespace common::types
         }
     }
 
+    inline constexpr auto sideToIndex(Side side) noexcept
+    {
+        return static_cast<int8_t>(side) + 1;
+    }
+
+    inline constexpr auto sideToValue(Side side) noexcept
+    {
+        return static_cast<int8_t>(side);
+    }
     // TEST
     /*template<typename T, T tInvalid>
     inline std::string valueToString(T value)

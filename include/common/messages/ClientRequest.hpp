@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../types/OrderTypes.hpp"
+#include "../types/types.hpp"
 #include "../enums/ClientRequestType.hpp"
 
 using namespace common::types;

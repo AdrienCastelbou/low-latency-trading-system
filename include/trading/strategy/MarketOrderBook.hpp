@@ -2,7 +2,7 @@
 
 #include <string>
 #include "../../common/logging/Logger.hpp"
-#include "../../common/types/OrderTypes.hpp"
+#include "../../common/types/types.hpp"
 #include "../../common/data_structures/MemoryPool.hpp"
 #include "MarketOrder.hpp"
 #include "OrderHashMap.hpp"

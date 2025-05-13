@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common/types/OrderTypes.hpp"
+#include "common/types/types.hpp"
 #include <sstream>
 
 namespace trading::strategy

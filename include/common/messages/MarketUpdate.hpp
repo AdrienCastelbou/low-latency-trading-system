@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../enums/MarketUpdateType.hpp"
-#include "../types/OrderTypes.hpp"
+#include "../types/types.hpp"
 
 using namespace common::types;
 
