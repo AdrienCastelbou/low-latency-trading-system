@@ -37,7 +37,7 @@ namespace trading::strategy
             void onMarketUpdate(MarketUpdate* marketUpdate) noexcept;
             auto priceToIndex(Price price) const noexcept;
             auto getOrdersAtPrice(Price price) const noexcept -> MarketOrdersAtPrice*;
-
+            auto getBBO() const noexcept -> BBO;
         private:
         void addOrder(MarketOrder* order) noexcept;
         auto addOrdersAtPrice(MarketOrdersAtPrice* newOrdersAtPrice) noexcept;

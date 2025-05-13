@@ -270,7 +270,11 @@ namespace trading::strategy
 
         _priceOrdersAtPrice.at(priceToIndex(price)) = nullptr;
         _ordersAtPricePool.deallocate(ordersAtPrice);
+    }
 
+    auto MarketOrderBook::getBBO() const noexcept -> BBO
+    {
+        return _bbo;
     }
 
     MarketOrderBook::~MarketOrderBook()

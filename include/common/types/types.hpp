@@ -89,7 +89,8 @@ namespace common::types
     {
         INVALID = 0,
         BUY     = 1,
-        SELL    = -1
+        SELL    = -1,
+        MAX     = 2
     };
 
     inline std::string sideToString(Side side)
