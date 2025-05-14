@@ -1,8 +1,8 @@
 #pragma once
-#include "../../common/types/types.hpp"
+#include "../../../common/types/types.hpp"
 #include <string>
 
-namespace trading::strategy
+namespace trading::strategy::order_book
 {
     using namespace common::types;
 

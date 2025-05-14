@@ -1,7 +1,7 @@
-#include "trading/strategy/MarketOrdersAtPrice.hpp"
+#include "trading/strategy/order_book/MarketOrdersAtPrice.hpp"
 #include <sstream>
 
-namespace trading::strategy
+namespace trading::strategy::order_book
 {
     MarketOrdersAtPrice::MarketOrdersAtPrice(Side side, Price price, MarketOrder* firstOrder, MarketOrdersAtPrice* prevEntry, MarketOrdersAtPrice* nextEntry)
         : _side(side), _price(price), _firstOrder(firstOrder), _nextEntry(nextEntry), _prevEntry(prevEntry)

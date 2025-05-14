@@ -1,9 +1,9 @@
-#include "trading/strategy/MarketOrderBook.hpp"
+#include "trading/strategy/order_book/MarketOrderBook.hpp"
 #include "common/constants/constants.hpp"
 #include "common/time/time.hpp"
 #include "common/messages/MarketUpdate.hpp"
 
-namespace trading::strategy
+namespace trading::strategy::order_book
 {
     using namespace common::constants;
     using namespace common::time;

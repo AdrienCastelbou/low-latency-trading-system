@@ -2,7 +2,7 @@
 
 #include <string>
 #include "../../common/types/types.hpp"
-#include "MarketOrderBook.hpp"
+#include "order_book/MarketOrderBook.hpp"
 
 namespace common
 {
@@ -30,8 +30,8 @@ namespace trading::strategy
             FeatureEngine(Logger* logger);
             ~FeatureEngine() = default;
 
-            void onOrderBookUpdate(TickerId tickerId, Price price, Side side, MarketOrderBook* book) noexcept;
-            void onTradeUpdate(const MarketUpdate* marketUpdate, MarketOrderBook* book) noexcept;
+            void onOrderBookUpdate(TickerId tickerId, Price price, Side side, order_book::MarketOrderBook* book) noexcept;
+            void onTradeUpdate(const MarketUpdate* marketUpdate, order_book::MarketOrderBook* book) noexcept;
             double getMktPrice() const noexcept;
             double getAggTradeQtyRatio() const noexcept;
         private:

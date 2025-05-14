@@ -1,6 +1,7 @@
-#include "trading/strategy/MarketOrder.hpp"
+#include "trading/strategy/order_book/MarketOrder.hpp"
 #include <sstream>
-namespace trading::strategy
+
+namespace trading::strategy::order_book
 {
     MarketOrder::MarketOrder(OrderId orderId, Side side, Price price, Qty qty, Priority priority, MarketOrder* prevOrder, MarketOrder* nextOrder) noexcept
     : _orderId(orderId), _side(side), _price(price), _qty(qty), _priority(priority), _prevOrder(prevOrder), _nextOrder(nextOrder)

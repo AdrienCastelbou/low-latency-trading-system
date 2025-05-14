@@ -13,7 +13,7 @@ namespace trading::strategy
     {
     }
 
-    void FeatureEngine::onOrderBookUpdate(TickerId tickerId, Price price, Side side, MarketOrderBook* book) noexcept
+    void FeatureEngine::onOrderBookUpdate(TickerId tickerId, Price price, Side side, order_book::MarketOrderBook* book) noexcept
     {
         const auto bbo = book->getBBO();
 
@@ -27,7 +27,7 @@ namespace trading::strategy
                     getCurrentTimeStr(&_timeStr), tickerId, priceToString(price).c_str(), sideToString(side).c_str(), _mktPrice, _aggTradeQtyRatio );
     }
 
-    void FeatureEngine::onTradeUpdate(const MarketUpdate* marketUpdate, MarketOrderBook* book) noexcept
+    void FeatureEngine::onTradeUpdate(const MarketUpdate* marketUpdate, order_book::MarketOrderBook* book) noexcept
     {
         const auto bbo = book->getBBO();
 

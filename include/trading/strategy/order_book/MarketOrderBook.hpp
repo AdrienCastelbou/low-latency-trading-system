@@ -1,14 +1,14 @@
 #pragma once
 
 #include <string>
-#include "../../common/logging/Logger.hpp"
-#include "../../common/types/types.hpp"
-#include "../../common/data_structures/MemoryPool.hpp"
+#include "../../../common/logging/Logger.hpp"
+#include "../../../common/types/types.hpp"
+#include "../../../common/data_structures/MemoryPool.hpp"
 #include "MarketOrder.hpp"
 #include "OrderHashMap.hpp"
 #include "MarketOrdersAtPrice.hpp"
 #include "OrdersAtPriceHashMap.hpp"
-#include "BBO.hpp"
+#include "../BBO.hpp"
 
 namespace common
 {
@@ -18,7 +18,7 @@ namespace common
     }
 }
 
-namespace trading::strategy
+namespace trading::strategy::order_book
 {
     using namespace common::types;
     using namespace common::data_structures;

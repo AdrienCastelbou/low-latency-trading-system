@@ -1,7 +1,6 @@
 #pragma once
 #include <array>
 #include "../../common/types/types.hpp"
-#include <stringstream>
 
 namespace common
 {
