@@ -2,13 +2,17 @@
 #include "trading/strategy/BBO.hpp"
 #include "common/messages/ClientResponse.hpp"
 #include "common/logging/Logger.hpp"
-#include <stringstream>
+#include "common/logging/Logger.hpp"
+#include "common/time/time.hpp"
+#include <sstream>
 
 namespace trading::strategy
 {
     using namespace common::types;
+    using namespace common::logging;
+    using namespace common::time;
 
-    auto PositionInfo::toString() const;
+    std::string PositionInfo::toString() const
     {
         std::stringstream ss;
         ss << "Position{"
@@ -24,7 +28,7 @@ namespace trading::strategy
         return ss.str();
     }
 
-    auto PositionInfo::addFill(const ClientResponse* clientResponse, Logger* logger)
+    void PositionInfo::addFill(const ClientResponse* clientResponse, Logger* logger)
     {
         const auto oldPosition  = _position;
         const auto sideIndex    = sideToIndex(clientResponse->_side);
@@ -32,19 +36,19 @@ namespace trading::strategy
         const auto sideValue    = sideToValue(clientResponse->_side);
         
         _position += clientResponse->_execQty * sideValue;
-        volume += clientResponse->_execQty;
+        _volume += clientResponse->_execQty;
         
-        if (olderPosition * sideValue >= 0) // increasing position
+        if (oldPosition * sideValue >= 0) // increasing position
         {
-            _openVwap[sideIndex] += clientResponse->execQty * clientResponse->_price;
+            _openVwap[sideIndex] += clientResponse->_execQty * clientResponse->_price;
         }
         else // decreasing position
         {
             const auto oppSideVwap  = _openVwap[oppSideIndex] / std::abs(oldPosition);
             _openVwap[oppSideIndex] = oppSideVwap * std::abs(_position);
-            _realPnl += std::min(clientResponse->_execQty, std::abs(oldPosition)) * (oppSideVwap - clientResponse->_price) * sideValue;
+            _realPnl += std::min(clientResponse->_execQty, static_cast<Qty>(std::abs(oldPosition))) * (oppSideVwap - clientResponse->_price) * sideValue;
             
-            if (position * oldPosition < 0) // flipped position
+            if (_position * oldPosition < 0) // flipped position
             {
                 _openVwap[sideIndex] = clientResponse->_price * std::abs(_position);
                 _openVwap[oppSideIndex] = 0;
@@ -63,7 +67,7 @@ namespace trading::strategy
             }
             else
             {
-                _unrealPnl = (openVwap[sideToIndex(Side::SELL)] / std::abs(_position) - clientResponse->_price) * std::abs(_position);
+                _unrealPnl = (_openVwap[sideToIndex(Side::SELL)] / std::abs(_position) - clientResponse->_price) * std::abs(_position);
             }
         }
         _totalPnl = _realPnl + _unrealPnl;
@@ -73,14 +77,14 @@ namespace trading::strategy
     }
 
 
-    auto PositionInfo::updateBBO(const BBO* bbo, Logger* logger)
+    void PositionInfo::updateBBO(const BBO* bbo, Logger* logger) noexcept
     {
         std::string timeStr;
         _bbo = bbo;
 
-        if (_position && _bbo->bidPrice != PRICE_INVALID && _bbo->askPrice != PRICE_INVALID)
+        if (_position && _bbo->_bidPrice != PRICE_INVALID && _bbo->_askPrice != PRICE_INVALID)
         {
-            const auto midPrice = (_bbo->bidPrice + _bbo->askPrice) >> 1;
+            const auto midPrice = (_bbo->_bidPrice + _bbo->_askPrice) >> 1;
 
             if (_position > 0)
             {
@@ -88,7 +92,7 @@ namespace trading::strategy
             }
             else
             {
-                _unrealPnl = (openVwap[sideToIndex(Side::SELL)] / std::abs(_position) - midPrice) * std::abs(_position);
+                _unrealPnl = (_openVwap[sideToIndex(Side::SELL)] / std::abs(_position) - midPrice) * std::abs(_position);
             }
 
             const auto oldTotalPnl = _totalPnl;

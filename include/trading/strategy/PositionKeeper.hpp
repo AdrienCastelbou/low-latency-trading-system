@@ -32,12 +32,12 @@ namespace trading::strategy
 
             void addFill(const ClientResponse* clientResponse) noexcept;
             void updateBBO(TickerId tickerId, const BBO* bbo) noexcept;
-            PositionInfo* getPositionInfo(TickerId tickerId) const noexcept;
+            auto getPositionInfo(TickerId tickerId) const noexcept;
             std::string toString() const;
         private:
             std::string _timeStr;
             Logger* _logger = nullptr;
             std::array<PositionInfo, MAX_TICKERS> _tickerPosition;
 
-    }
+    };
 }

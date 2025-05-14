@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include "../../common/types/types.hpp"
+#include <string>
 
 namespace common
 {
@@ -18,6 +19,7 @@ namespace trading::strategy
 {
     using namespace common::types;
     using namespace common::messages;
+    using namespace common::logging;
 
     struct BBO;
 
@@ -31,8 +33,8 @@ namespace trading::strategy
         Qty _volume         = 0;
         const BBO* _bbo     = nullptr;
 
-        auto toString() const;
-        auto addFill(const ClientResponse* clientResponse, Logger* logger);
-        auto updateBBO(const BBO* bbo, Logger* logger) noexcept;
+        std::string toString() const;
+        void addFill(const ClientResponse* clientResponse, Logger* logger);
+        void updateBBO(const BBO* bbo, Logger* logger) noexcept;
     };
 }

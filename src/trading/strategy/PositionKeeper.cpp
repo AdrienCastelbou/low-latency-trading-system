@@ -1,14 +1,17 @@
 #include "trading/strategy/PositionKeeper.hpp"
-#include <stringstream>
+#include <sstream>
 #include "common/types/types.hpp"
 #include "trading/strategy/BBO.hpp"
+#include "common/messages/ClientResponse.hpp"
 
 namespace trading::strategy
 {    
+    using namespace common::messages;
+
     PositionKeeper::PositionKeeper(Logger* logger) : _logger(logger)
     {}
 
-    PositionInfo* PositionKeeper::getPositionInfo(TickerId tickerId) const noexcept
+    auto PositionKeeper::getPositionInfo(TickerId tickerId) const noexcept
     {
         return &(_tickerPosition.at(tickerId));
     }
@@ -18,7 +21,7 @@ namespace trading::strategy
         _tickerPosition.at(clientResponse->_tickerId).addFill(clientResponse, _logger);
     }
 
-    void PositionKeeper::addBBO(TickerId tickerId, const BBO* bbo) noexcept
+    void PositionKeeper::updateBBO(TickerId tickerId, const BBO* bbo) noexcept
     {
         _tickerPosition.at(tickerId).updateBBO(bbo, _logger);
     }
