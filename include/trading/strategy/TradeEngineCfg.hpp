@@ -22,5 +22,5 @@ namespace trading::strategy
                << "}";
             return ss.str();
           }
-    }
+    };
 }

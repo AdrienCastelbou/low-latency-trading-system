@@ -23,5 +23,5 @@ namespace trading::strategy::risk_management
                 << "}";
             return ss.str();
         }
-    }
+    };
 }
