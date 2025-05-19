@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 #include "TickerRiskInfoHashMap.hpp"
-#include "../../common/types/types.hpp"
+#include "../../../common/types/types.hpp"
 #include "RiskCheckResult.hpp"
-
+#include "../TradeEngineCfgHashMap.hpp"
 namespace common::logging
 {
     class Logger;
@@ -11,8 +11,7 @@ namespace common::logging
 
 namespace trading::strategy
 {
-    struct PositionKeeper;
-    struct TradeEngineCfg;
+    class PositionKeeper;
 }
 
 namespace trading::strategy::risk_management
@@ -24,15 +23,12 @@ namespace trading::strategy::risk_management
     class RiskManager
     {
         public:
-            RiskManager(logging::Logger* logger, const PositionKeeper* positionKeeper, const TradeEngineCfg& cfg);
+            RiskManager(logging::Logger* logger, const PositionKeeper* positionKeeper, const TradeEngineCfgHashMap& cfg);
             
             RiskCheckResult checkPreTradeRisk(TickerId tickerId, Side side, Qty qty) const noexcept;
         private:
-            std::string _timeStr;
             logging::Logger* _logger = nullptr;
             std::string _timeStr;
             TickerRiskInfoHashMap _tickerRisk;
-    }
-    
-
+    };
 }

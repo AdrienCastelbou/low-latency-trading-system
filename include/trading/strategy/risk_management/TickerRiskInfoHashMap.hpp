@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RiskInfo.hpp"
-#include "../../../common/types/types.hpp"
+#include "../../../common/constants/constants.hpp"
 
 namespace trading::strategy::risk_management
 {

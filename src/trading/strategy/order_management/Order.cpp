@@ -13,7 +13,7 @@ namespace trading::strategy::order_management
             << "side" << sideToString(_side) << " "
             << "price" << priceToString(_price) << " "
             << "qty" << qtyToString(_qty) << " "
-            << "state" << OrderStateToString(_state)
+            << "state" << OrderStateToString(_orderState)
             << "]";
         return ss.str();
     }

@@ -8,20 +8,21 @@
 namespace trading::strategy
 {
     namespace om = order_management;
+    namespace ob = order_book;
     using namespace common::logging;
     using namespace common::time;
     using namespace common::types;
     using namespace common::messages;
 
     MarketMaker::MarketMaker(Logger* logger, TradeEngine* tradeEngine, const FeatureEngine* featureEngine, om::OrderManager* orderManager, const TradeEngineCfgHashMap& _tickerCfg)
-    : _logger(logger), _featureEngine(featureEngine), _orderManager(orderManager), _tickerCfg(_tickerCfg)
+    : _featureEngine(featureEngine), _orderManager(orderManager), _logger(logger), _tickerCfg(_tickerCfg)
     {
         tradeEngine->_algoOnOrderBookUpdate = [this](auto tickerId, auto price, auto side, auto book) { onOrderBookUpdate(tickerId, price, side, book); };
         tradeEngine->_algoOnTradeUpdate     = [this](auto marketUpdate, auto book) { onTradeUpdate(marketUpdate, book); };
-        tradeEngine->_algoOnOrderUpdate     = [this](auto marketUpdate, auto book) { onOrderUpdate(marketUpdate, book); };
+        tradeEngine->_algoOnOrderUpdate     = [this](auto clientResponse) { onOrderUpdate(clientResponse); };
     }
 
-    void MarketMaker::onOrderBookUpdate(TickerId tickerId, Price price, Side side, const om::OrderBook* book) noexcept
+    void MarketMaker::onOrderBookUpdate(TickerId tickerId, Price price, Side side, const ob::MarketOrderBook* book) noexcept
     {
         _logger->log("%:% %() % ticker:% price:% side:%\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), tickerId, priceToString(price).c_str(), sideToString(side).c_str());
@@ -42,8 +43,9 @@ namespace trading::strategy
         }
     }
 
-    void MarketMaker::onTradeUpdate(const MarketUpdate* marketUpdate, const om::OrderBook* book) noexcept
+    void MarketMaker::onTradeUpdate(const MarketUpdate* marketUpdate, const ob::MarketOrderBook* book) noexcept
     {
+        (void)book;
         _logger->log("%:% %() % %\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), marketUpdate->toString().c_str());
     }

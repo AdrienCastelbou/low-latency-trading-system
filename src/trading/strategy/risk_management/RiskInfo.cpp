@@ -1,4 +1,5 @@
 #include "trading/strategy/risk_management/RiskInfo.hpp"
+#include "trading/strategy/PositionInfo.hpp"
 #include <sstream>
 
 namespace trading::strategy::risk_management
@@ -14,7 +15,7 @@ namespace trading::strategy::risk_management
      return ss.str();
     }
 
-    RiskCheckResult RiskInfo::checkPreTradeRisk(Side side, Qty qty) noexcept
+    RiskCheckResult RiskInfo::checkPreTradeRisk(Side side, Qty qty) const noexcept
     {
         if (qty > _riskCfg._maxOrderSize) [[ unlikely ]]
         {
@@ -24,7 +25,7 @@ namespace trading::strategy::risk_management
         {
             return RiskCheckResult::POSITION_TOO_LARGE;
         }
-        if (_positionInfo->_maxPnl < _riskCfg._maxLoss) [[ unlikely ]]
+        if (_positionInfo->_totalPnl < _riskCfg._maxLoss) [[ unlikely ]]
         {
             return RiskCheckResult::LOSS_TOO_LARGE;
         }

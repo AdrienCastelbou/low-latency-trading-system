@@ -18,12 +18,18 @@ namespace common
     }
 }
 
+namespace trading::strategy
+{
+    class TradeEngine;
+}
+
 namespace trading::strategy::order_book
 {
     using namespace common::types;
     using namespace common::data_structures;
     using namespace common::logging;
     using namespace common::messages;
+    namespace st = trading::strategy;
 
     class TradeEngine;
 
@@ -33,11 +39,11 @@ namespace trading::strategy::order_book
             MarketOrderBook(TickerId tickerId, Logger* tradeEngine);
             ~MarketOrderBook();
 
-            void setTradeEngine(TradeEngine* tradeEngine);
+            void setTradeEngine(st::TradeEngine* tradeEngine);
             void onMarketUpdate(MarketUpdate* marketUpdate) noexcept;
             auto priceToIndex(Price price) const noexcept;
             auto getOrdersAtPrice(Price price) const noexcept -> MarketOrdersAtPrice*;
-            auto getBBO() const noexcept -> BBO;
+            auto getBBO() const noexcept -> const BBO*;
         private:
         void addOrder(MarketOrder* order) noexcept;
         auto addOrdersAtPrice(MarketOrdersAtPrice* newOrdersAtPrice) noexcept;
@@ -46,7 +52,7 @@ namespace trading::strategy::order_book
         void updateBBO(bool updateBid, bool updateAsk) noexcept;
 
             const TickerId _tickerId;
-            TradeEngine* _tradeEngine = nullptr;
+            st::TradeEngine* _tradeEngine = nullptr;
             OrderHashMap _oidToOrder;
             MemoryPool<MarketOrder> _orderPool;
             MemoryPool<MarketOrdersAtPrice> _ordersAtPricePool;

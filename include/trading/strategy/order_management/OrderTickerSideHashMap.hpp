@@ -1,6 +1,6 @@
 #pragma once
 #include "OrderSideHashMap.hpp"
-#include "../../../common/types/types.hpp"
+#include "../../../common/constants/constants.hpp"
 
 namespace trading::strategy::order_management
 {

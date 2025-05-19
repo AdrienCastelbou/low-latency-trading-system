@@ -2,6 +2,7 @@
 #include "common/constants/constants.hpp"
 #include "common/time/time.hpp"
 #include "common/messages/MarketUpdate.hpp"
+#include "trading/strategy/TradeEngine.hpp"
 
 namespace trading::strategy::order_book
 {
@@ -14,7 +15,7 @@ namespace trading::strategy::order_book
         (void) _tickerId;
     }
 
-    void MarketOrderBook::setTradeEngine(TradeEngine* tradeEngine)
+    void MarketOrderBook::setTradeEngine(st::TradeEngine* tradeEngine)
     {
         _tradeEngine = tradeEngine;
     }
@@ -47,7 +48,7 @@ namespace trading::strategy::order_book
             break;
             case TRADE:
             {
-                _tradeEngine->onTrade(marketUpdate, this);
+                _tradeEngine->onTradeUpdate(marketUpdate, this);
                 return;
             }
             break;
@@ -87,9 +88,9 @@ namespace trading::strategy::order_book
         }
         updateBBO(bidUpdated, askUpdated);
 
-        _tradeEngine->onOrderBookUpdate(marketUpdate->_tickerId, marketUpdate->_price, marketUpdate->_side);
-        _logger->log("%:% %() % OrderBook\n%\n",
-                    __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), "a"/*toString(false, true)*/);
+        _tradeEngine->onOrderBookUpdate(marketUpdate->_tickerId, marketUpdate->_price, marketUpdate->_side, this);
+        _logger->log("%:% %() % % %\n",
+                    __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), marketUpdate->toString(), _bbo.toString());
     }
 
     void MarketOrderBook::updateBBO(bool updateBid, bool updateAsk) noexcept
@@ -272,9 +273,9 @@ namespace trading::strategy::order_book
         _ordersAtPricePool.deallocate(ordersAtPrice);
     }
 
-    auto MarketOrderBook::getBBO() const noexcept -> BBO
+    auto MarketOrderBook::getBBO() const noexcept -> const BBO*
     {
-        return _bbo;
+        return &_bbo;
     }
 
     MarketOrderBook::~MarketOrderBook()

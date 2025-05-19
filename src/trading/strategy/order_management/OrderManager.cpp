@@ -1,9 +1,11 @@
-#pragma once
+#include "trading/strategy/order_management/OrderManager.hpp"
 #include "common/messages/ClientRequest.hpp"
 #include "common/enums/ClientRequestType.hpp"
-#include "common/enums/ClientResponse.hpp"
+#include "common/messages/ClientResponse.hpp"
 #include "common/enums/ClientResponseType.hpp"
 #include "common/time/time.hpp"
+#include "common/logging/Logger.hpp"
+#include "trading/strategy/TradeEngine.hpp"
 
 namespace trading::strategy::order_management
 {
@@ -13,17 +15,17 @@ namespace trading::strategy::order_management
     using namespace common::enums;
     using namespace common::time;
 
-    OrderManager::OrderManager(Logger* logger, TradeEngine* tradeEngine, RiskManager& riskManager)
-    : _logger(logger), _tradeEngine(tradeEngine), _riskManager(riskManager)
+    OrderManager::OrderManager(Logger* logger, TradeEngine* tradeEngine, rm::RiskManager& riskManager)
+    : _tradeEngine(tradeEngine), _riskManager(riskManager), _logger(logger)
     {
     }
 
     void OrderManager::moveOrders(TickerId tickerId, Price bidPrice, Price askPrice, Qty clip) noexcept
     {
-        auto bidOrder = &(_tickerSideOrder.at(tickerId).at(sideToIndex(Side::BID)));
-        moveOrder(bidOrder, tickerId, bidPrice, Side::BID, clip);
-        auto askOrder = &(_tickerSideOrder.at(tickerId).at(sideToIndex(Side::ASK)));
-        moveOrder(askOrder, tickerId, askPrice, Side::ASK, clip);
+        auto bidOrder = &(_tickerSideOrder.at(tickerId).at(sideToIndex(Side::BUY)));
+        moveOrder(bidOrder, tickerId, bidPrice, Side::BUY, clip);
+        auto askOrder = &(_tickerSideOrder.at(tickerId).at(sideToIndex(Side::SELL)));
+        moveOrder(askOrder, tickerId, askPrice, Side::SELL, clip);
     }
 
 
@@ -47,7 +49,7 @@ namespace trading::strategy::order_management
                 {
                     const auto riskResult = _riskManager.checkPreTradeRisk(tickerId, side, qty);
 
-                    if (riskResult == RiskCheckResult::ALLOWED) [[ likely ]]
+                    if (riskResult == rm::RiskCheckResult::ALLOWED) [[ likely ]]
                     {
                         newOrder(order, tickerId, price, side, qty);
                     }
@@ -55,7 +57,7 @@ namespace trading::strategy::order_management
                     {
                         _logger->log("%:% %() % Ticker: % Side: % Qty: % RiskCheckResult: %\n",
                                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr),
-                                    tickerIdToString(tickerId), sideToStr(side), qtyToString(qty), riskCheckResultToString(riskResult));
+                                    tickerIdToString(tickerId), sideToString(side), qtyToString(qty), riskCheckResultToString(riskResult));
                     } 
                 }
             }
@@ -68,7 +70,7 @@ namespace trading::strategy::order_management
 
     void OrderManager::newOrder(Order* order, TickerId tickerId, Price price, Side side, Qty qty) noexcept
     {
-        const ClientRequest newRequest{ClientRequestType::NEW, _tradeEngine->clientId(), tickerId, _nextOrderId, side, price, qty};
+        const ClientRequest newRequest{ClientRequestType::NEW, _tradeEngine->getClientId(), tickerId, _nextOrderId, side, price, qty};
 
         _tradeEngine->sendClientRequest(&newRequest);
         *order = {tickerId, _nextOrderId, side, price, qty, OrderState::PENDING_NEW};
@@ -80,7 +82,7 @@ namespace trading::strategy::order_management
 
     void OrderManager::cancelOrder(Order* order) noexcept
     {
-        const ClientRequest cancelRequest{ClientRequestType::CANCEL, _tradeEngine->clientId(), order->_tickerId, order->_orderId, order->_side, order->_price, order->_qty};
+        const ClientRequest cancelRequest{ClientRequestType::CANCEL, _tradeEngine->getClientId(), order->_tickerId, order->_orderId, order->_side, order->_price, order->_qty};
         
         _tradeEngine->sendClientRequest(&cancelRequest);
         order->_orderState = OrderState::PENDING_CANCEL;
@@ -89,7 +91,7 @@ namespace trading::strategy::order_management
                     cancelRequest.toString().c_str(), order->toString().c_str());
     }
 
-    void OrderManager::onOrderUpdate(ClientResponse* clientResponse) noexcept
+    void OrderManager::onOrderUpdate(const ClientResponse* clientResponse) noexcept
     {
         _logger->log("%:% %() % %\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), clientResponse->toString().c_str());
@@ -105,7 +107,7 @@ namespace trading::strategy::order_management
                 order->_orderState = OrderState::LIVE;
             }
             break;
-            case CANCELLED:
+            case CANCELED:
             {
                 order->_orderState = OrderState::DEAD;
             }

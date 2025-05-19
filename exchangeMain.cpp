@@ -1,10 +1,20 @@
 #include <csignal>
+#include <unistd.h>
+#include "include/common/common.hpp"
+#include "include/common/time/time.hpp"
+#include "include/common/data_structures/LFQueue.hpp"
+#include "include/common/logging/Logger.hpp"
+#include "include/common/constants/constants.hpp"
 #include "include/exchange/matching_engine/MatchingEngine.hpp"
 #include "include/exchange/market_data/MarketDataPublisher.hpp"
 #include "include/exchange/order_server/OrderServer.hpp"
 
+using namespace common;
+using namespace common::time;
+using namespace common::logging;
 using namespace exchange;
-common::logging::Logger* logger = nullptr;
+
+Logger* logger = nullptr;
 matching_engine::MatchingEngine* matchingEngine = nullptr;
 market_data::MarketDataPublisher* marketDataPublisher = nullptr;
 order_server::OrderServer* orderServer = nullptr;
@@ -31,8 +41,8 @@ int main(int, char**)
     logger = new common::logging::Logger("exchange_main.log");
     signal(SIGINT, signalHandler);
     const int sleepTime = 100 * 1000;
-    shared::ClientRequestLFQueue clientRequests(common::constants::MAX_CLIENT_UPDATES);
-    shared::ClientResponseLFQueue clientResponses(common::constants::MAX_CLIENT_UPDATES);
+    common::data_structures::ClientRequestLFQueue clientRequests(common::constants::MAX_CLIENT_UPDATES);
+    common::data_structures::ClientResponseLFQueue clientResponses(common::constants::MAX_CLIENT_UPDATES);
     common::data_structures::MarketUpdateLFQueue marketUpdates(common::constants::MAX_MARKET_UPDATES);
     std::string timeStr;
     logger->log("%:% %() % Starting Matching Engine...\n",

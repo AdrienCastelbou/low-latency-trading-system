@@ -11,20 +11,20 @@ namespace trading::strategy::risk_management
         ALLOWED = 4
     };
 
-    inline auto riskCheckResultToString(RiskCheckResult riskCheckResult)
+    inline auto riskCheckResultToString(RiskCheckResult riskCheckResult) -> std::string
     {
         switch (riskCheckResult)
         {
             using enum RiskCheckResult;
-            case "INVALID":
+            case INVALID:
                 return "INVALID";
-            case "ORDER_TOO_LARGE":
+            case ORDER_TOO_LARGE:
                 return "ORDER_TOO_LARGE";
-            case "POSITION_TOO_LARGE":
+            case POSITION_TOO_LARGE:
                 return "POSITION_TOO_LARGE";
-            case "LOSS_TOO_LARGE":
+            case LOSS_TOO_LARGE:
                 return "LOSS_TOO_LARGE";
-            case "ALLOWED":
+            case ALLOWED:
                 return "ALLOWED";
         }
         return "";

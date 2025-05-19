@@ -11,7 +11,7 @@ namespace trading::strategy
     PositionKeeper::PositionKeeper(Logger* logger) : _logger(logger)
     {}
 
-    auto PositionKeeper::getPositionInfo(TickerId tickerId) const noexcept
+    const PositionInfo* PositionKeeper::getPositionInfo(TickerId tickerId) const noexcept
     {
         return &(_tickerPosition.at(tickerId));
     }

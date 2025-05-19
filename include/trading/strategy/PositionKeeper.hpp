@@ -32,7 +32,7 @@ namespace trading::strategy
 
             void addFill(const ClientResponse* clientResponse) noexcept;
             void updateBBO(TickerId tickerId, const BBO* bbo) noexcept;
-            auto getPositionInfo(TickerId tickerId) const noexcept;
+            const PositionInfo* getPositionInfo(TickerId tickerId) const noexcept;
             std::string toString() const;
         private:
             std::string _timeStr;

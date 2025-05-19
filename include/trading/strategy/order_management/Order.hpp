@@ -16,5 +16,5 @@ namespace trading::strategy::order_management
         OrderState _orderState = OrderState::INVALID;
 
         std::string toString() const;
-    }
+    };
 }

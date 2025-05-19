@@ -17,9 +17,9 @@ namespace trading::strategy
     {
         const auto bbo = book->getBBO();
 
-        if (bbo._bidPrice != PRICE_INVALID && bbo._askPrice != PRICE_INVALID) [[ likely ]]
+        if (bbo->_bidPrice != PRICE_INVALID && bbo->_askPrice != PRICE_INVALID) [[ likely ]]
         {
-            _mktPrice = (bbo._bidPrice * bbo._askQuantity + bbo._askPrice * bbo._bidQuantity) / static_cast<double>(bbo._bidQuantity + bbo._askQuantity);
+            _mktPrice = (bbo->_bidPrice * bbo->_askQuantity + bbo->_askPrice * bbo->_bidQuantity) / static_cast<double>(bbo->_bidQuantity + bbo->_askQuantity);
         }
 
         _logger->log("%:% %() % ticker:% price:% side:% mkt-price:% agg-trade-ratio:%\n",
@@ -31,9 +31,9 @@ namespace trading::strategy
     {
         const auto bbo = book->getBBO();
 
-        if (bbo._bidPrice!= PRICE_INVALID && bbo._askPrice!= PRICE_INVALID) [[ likely ]]
+        if (bbo->_bidPrice!= PRICE_INVALID && bbo->_askPrice!= PRICE_INVALID) [[ likely ]]
         {
-            _aggTradeQtyRatio = static_cast<double>(marketUpdate->_qty) / (marketUpdate->_side == Side::BUY ? bbo._askQuantity : bbo._bidQuantity);
+            _aggTradeQtyRatio = static_cast<double>(marketUpdate->_qty) / (marketUpdate->_side == Side::BUY ? bbo->_askQuantity : bbo->_bidQuantity);
         }
         _logger->log("%:% %() % % mkt-price:% agg-trade-ratio:%\n",
                     __FILE__, __LINE__, __FUNCTION__,

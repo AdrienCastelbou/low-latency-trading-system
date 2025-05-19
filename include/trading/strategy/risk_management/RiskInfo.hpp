@@ -17,7 +17,7 @@ namespace trading::strategy
             RiskCfg _riskCfg;
 
             std::string toString() const;
-            RiskCheckResult checkPreTradeRisk(Side side, Qty qty) noexcept;
+            RiskCheckResult checkPreTradeRisk(Side side, Qty qty) const noexcept;
             ;
         };
     }

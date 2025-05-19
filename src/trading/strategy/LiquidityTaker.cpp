@@ -4,6 +4,7 @@
 #include "common/messages/MarketUpdate.hpp"
 #include "trading/strategy/FeatureEngine.hpp"
 #include "trading/strategy/TradeEngine.hpp"
+#include "trading/strategy/order_book/MarketOrderBook.hpp"
 
 namespace trading::strategy
 {
@@ -14,31 +15,32 @@ namespace trading::strategy
     using namespace common::messages;
 
     LiquidityTaker::LiquidityTaker(Logger* logger, TradeEngine* tradeEngine, const FeatureEngine* featureEngine, om::OrderManager* orderManager, const TradeEngineCfgHashMap& _tickerCfg)
-    : _logger(logger), _featureEngine(featureEngine), _orderManager(orderManager), _tickerCfg(_tickerCfg)
+    : _featureEngine(featureEngine), _orderManager(orderManager), _logger(logger), _tickerCfg(_tickerCfg)
     {
         tradeEngine->_algoOnOrderBookUpdate = [this](auto tickerId, auto price, auto side, auto book) { onOrderBookUpdate(tickerId, price, side, book); };
         tradeEngine->_algoOnTradeUpdate     = [this](auto marketUpdate, auto book) { onTradeUpdate(marketUpdate, book); };
-        tradeEngine->_algoOnOrderUpdate     = [this](auto marketUpdate, auto book) { onOrderUpdate(marketUpdate, book); };
+        tradeEngine->_algoOnOrderUpdate     = [this](auto clientResponse) { onOrderUpdate(clientResponse); };
     }
 
-    void LiquidityTaker::onOrderBookUpdate(TickerId tickerId, Price price, Side side, const order_management::OrderBook* book) noexcept
+    void LiquidityTaker::onOrderBookUpdate(TickerId tickerId, Price price, Side side, const order_book::MarketOrderBook* book) noexcept
     {
+        (void) book;
         _logger->log("%:% %() % ticker:% price:% side:%\n",
-            __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), tickerId, priceToString(price).c_str(), sideToString(side).c_str();
+            __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), tickerId, priceToString(price).c_str(), sideToString(side).c_str());
     }
-    void LiquidityTaker::onTradeUpdate(const MarketUpdate* marketUpdate, const order_management::OrderBook* book) noexcept
+    void LiquidityTaker::onTradeUpdate(const MarketUpdate* marketUpdate, const order_book::MarketOrderBook* book) noexcept
     {
         _logger->log("%:% %() % %\n",
             __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), marketUpdate->toString().c_str());
         const auto bbo = book->getBBO();
-        const auto aggQtyRatio = _featureEngine->getAggQtyRatio();
+        const auto aggQtyRatio = _featureEngine->getAggTradeQtyRatio();
     
         if (bbo->_bidPrice != PRICE_INVALID && bbo->_askPrice != PRICE_INVALID && aggQtyRatio!= FEATURE_INVALID) [[ likely ]]
         {
             _logger->log("%:% %() % % fair price:%\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), bbo->toString().c_str(), aggQtyRatio);
-            const auto clip         = _tickerCfg.at(tickerId)._clip;
-            const auto threshold    = _tickerCfg.at(tickerId)._threshold;
+            const auto clip         = _tickerCfg.at(marketUpdate->_tickerId)._clip;
+            const auto threshold    = _tickerCfg.at(marketUpdate->_tickerId)._threshold;
 
             if (aggQtyRatio >= threshold)
             {
