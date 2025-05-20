@@ -6,7 +6,7 @@
 
 namespace trading::order_gateway
 {
-    OrderGateway::OrderGateway(ClientId clientId, ClientRequestLFQueue* clientRequests, ClientResponseLFQueue* clientResponses, std::string& ip, const std::string& iface, int port)
+    OrderGateway::OrderGateway(ClientId clientId, ClientRequestLFQueue* clientRequests, ClientResponseLFQueue* clientResponses, const std::string& ip, const std::string& iface, int port)
     : _clientId(clientId), _ip(ip), _iface(iface), _port(port), _outgoingRequests(clientRequests), _incomingResponses(clientResponses), _logger("trading_order_gateway" + std::to_string(clientId) + ".log"), _tcpSocket(_logger)
     {
         _tcpSocket._recvCallback = [this] (auto socket, auto rxTime) { recvCallback(socket, rxTime); };

@@ -136,7 +136,7 @@ namespace trading::strategy
         _lastEventTime = getCurrentNanos();
     }
 
-    auto TradeEngine::silentSeconds() noexcept
+    Nanos TradeEngine::silentSeconds() noexcept
     {
         return (getCurrentNanos() - _lastEventTime) / NANOS_TO_SECS;
     }

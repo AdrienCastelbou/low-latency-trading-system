@@ -45,9 +45,10 @@ namespace trading::strategy
             std::function<void(TickerId ticker_id, Price price, Side side, ob::MarketOrderBook *book)> _algoOnOrderBookUpdate;
             std::function<void(const MarketUpdate* market_update, ob::MarketOrderBook *book)> _algoOnTradeUpdate;
             std::function<void(const ClientResponse* client_response)> _algoOnOrderUpdate;
-        private:
+
             void initLastEventTime() noexcept;
-            auto silentSeconds() noexcept;
+            Nanos silentSeconds() noexcept;
+        private:
             void defaultAlgoOnOrderBookUpdate(TickerId tickerId, Price price, Side side, ob::MarketOrderBook *book) noexcept;
             void defaultAlgoOnTradeUpdate(const MarketUpdate* marketUpdate, ob::MarketOrderBook *book) noexcept;
             void defaultAlgoOnOrderUpdate(const ClientResponse* clientResponse) noexcept;
