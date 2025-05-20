@@ -30,7 +30,7 @@ target_include_directories(trading_lib PUBLIC include)
 target_link_libraries(trading_lib PRIVATE common_lib)
 
 # Exchange executable
-add_executable(exchange_engine exchangeMain.cpp)
+add_executable(exchange_engine src/exchange/exchangeMain.cpp)
 target_link_libraries(exchange_engine PRIVATE exchange_lib)
 
 # Trading executable
