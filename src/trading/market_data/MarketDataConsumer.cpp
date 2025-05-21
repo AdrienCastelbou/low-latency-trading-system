@@ -52,7 +52,7 @@ namespace trading::market_data
                 }
                 else if (!isSnapshot)
                 {
-                    _logger.log("%:% %() % %\n", __FILE__, __LINE__, __FUNCTION__, request->toString());
+                    _logger.log("%:% %() % %\n", __FILE__, __LINE__, __FUNCTION__, time::getCurrentTimeStr(&_timeStr), request->toString());
                     ++_nextExpIncSeqNum;
                     auto nextWrite = _incomingMdUpdates->getNextToWriteTo();
                     *nextWrite = std::move(request->_marketUpdate);
@@ -197,7 +197,7 @@ namespace trading::market_data
 
     void MarketDataConsumer::run()
     {
-        _logger.log("%:% %() %\n", __FILE__, __LINE__, __FUNCTION__);
+        _logger.log("%:% %() %\n", __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr));
         while (_run)
         {
             _incrementalMcastSocket.sendAndRecv();

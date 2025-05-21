@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 
     for (int i = 3; i < argc; i+= 5, ++nextTickerId)
     {
-        tickerCfg.at(i) = {
+        tickerCfg.at(nextTickerId) = {
             static_cast<types::Qty>(std::atoi(argv[i])),
             std::atof(argv[i+1]),
             {
