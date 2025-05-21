@@ -1,3 +1,5 @@
+![MasterHead](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExenQ3azRoYXpxazR6c2xyeGZoYWRscG5wejl3cm5vdGs4b2VocDg2dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VDb99mul41iLOY4vaF/giphy.gif)
+
 # [WIP] Low Latency Trading System
 
 This project is inspired by **Building Low Latency Applications with C++** by Sourav Ghosh. It aims to explore the concepts and techniques required to build low latency applications through the development of a complete electronic trading system.
