@@ -8,7 +8,7 @@ namespace common::messages
     std::string OMClientRequest::toString() const
     {
         std::stringstream ss;
-        ss << "Public MarketUpdate"
+        ss << "OMClientRequest"
            << " ["
            << " seq:" << _seqNum
            << " " << _clientRequest.toString()

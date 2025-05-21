@@ -44,7 +44,7 @@ namespace trading::market_data
                 {
                     if (!alreadyInRecovery) [[ unlikely ]]
                     {
-                        _logger.log("%:% %() % Packet drops on % socket. SeqNum expected: %, received: %n",
+                        _logger.log("%:% %() % Packet drops on % socket. SeqNum expected: %, received: %\n",
                                     __FILE__, __LINE__, __FUNCTION__, time::getCurrentTimeStr(&_timeStr), (isSnapshot? "snapshot" : "incremental"), _nextExpIncSeqNum, request->_seqNum);
                         startSnapshotSync();
                     }

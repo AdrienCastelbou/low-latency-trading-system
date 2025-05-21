@@ -37,7 +37,7 @@ namespace exchange::order_server
             
                 common::assert(_cidTcpSocket[clientResponse->_clientId] != nullptr, "Don't have a socket for client ID : " + std::to_string(clientResponse->_clientId));
                 _cidTcpSocket[clientResponse->_clientId]->send(&nextOutgoingSeqNum, sizeof(nextOutgoingSeqNum));
-                _cidTcpSocket[clientResponse->_clientId]->send(&clientResponse, sizeof(clientResponse));
+                _cidTcpSocket[clientResponse->_clientId]->send(clientResponse, sizeof(common::messages::ClientResponse));
                 _outgoingResp->updateReadIndex();
                 nextOutgoingSeqNum++;
             }

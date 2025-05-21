@@ -9,7 +9,7 @@ namespace common::messages
     {
         std::stringstream ss;
         
-        ss << "lientRequest"
+        ss << "clientResponse"
         << " ["
         << "type:" << enums::clientResponseTypeToString(_type)
         << " client:" << clientIdToString(_clientId)

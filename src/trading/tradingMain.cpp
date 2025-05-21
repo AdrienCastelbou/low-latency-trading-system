@@ -96,9 +96,12 @@ int main(int argc, char** argv)
             
             const auto cancelIdx = rand() % clientRequestsVec.size();
             auto cancelRequest = clientRequestsVec[cancelIdx];
-            cancelRequest._type = enums::ClientRequestType::CANCEL;
-            tradeEngine->sendClientRequest(&cancelRequest);
-            usleep(sleepTime);
+            if (cancelRequest._type != enums::ClientRequestType::CANCEL)
+            {
+                cancelRequest._type = enums::ClientRequestType::CANCEL;
+                tradeEngine->sendClientRequest(&cancelRequest);
+                usleep(sleepTime);
+            }
         }
     }
     while (tradeEngine->silentSeconds() < 60)
