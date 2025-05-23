@@ -58,11 +58,10 @@ namespace trading::market_data
                     *nextWrite = std::move(request->_marketUpdate);
                     _incomingMdUpdates->updateWriteIndex();
                 }
-
-                memcpy(socket->_inboundData.data(), socket->_inboundData.data() + i, socket->_nextRcvValidIndex - i);
-
-                socket->_nextRcvValidIndex -= i;
             }
+            memcpy(socket->_inboundData.data(), socket->_inboundData.data() + i, socket->_nextRcvValidIndex - i);
+
+            socket->_nextRcvValidIndex -= i;
         }
     }
 

@@ -37,7 +37,7 @@ namespace trading::strategy
     
         if (bbo->_bidPrice != PRICE_INVALID && bbo->_askPrice != PRICE_INVALID && aggQtyRatio!= FEATURE_INVALID) [[ likely ]]
         {
-            _logger->log("%:% %() % % fair price:%\n",
+            _logger->log("%:% %() % % aggQtyRatio:%\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), bbo->toString().c_str(), aggQtyRatio);
             const auto clip         = _tickerCfg.at(marketUpdate->_tickerId)._clip;
             const auto threshold    = _tickerCfg.at(marketUpdate->_tickerId)._threshold;
