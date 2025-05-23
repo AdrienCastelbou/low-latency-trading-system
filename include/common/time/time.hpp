@@ -3,6 +3,7 @@
 #include <chrono>
 #include <ctime>
 #include <string>
+#include "../performance/performanceUtils.hpp"
 
 namespace common::time
 {
@@ -21,13 +22,13 @@ namespace common::time
 
     inline auto& getCurrentTimeStr(std::string* timeStr)
     {
-        const auto time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        const auto clock = std::chrono::system_clock::now();
+        const auto time = std::chrono::system_clock::to_time_t(clock);
+        char nanosStr[24] = {0};
 
-        timeStr->assign(ctime(&time));
-        if (!timeStr->empty())
-        {
-            timeStr->at(timeStr->length() -1) = '\0';
-        }
+        snprintf(nanosStr, sizeof(nanosStr), "%.8s.%09lld", ctime(&time) + 11, std::chrono::duration_cast<std::chrono::nanoseconds>(clock.time_since_epoch()).count() % NANOS_TO_SECS);
+        timeStr->assign(nanosStr);
+
         return *timeStr;
     }
 } // namespace common::time
