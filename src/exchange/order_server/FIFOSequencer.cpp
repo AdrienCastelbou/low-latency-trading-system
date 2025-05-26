@@ -38,6 +38,7 @@ namespace exchange::order_server
             auto* nextWrite = _incomingRequests->getNextToWriteTo();
             *nextWrite = std::move(clientRequest._request);
             _incomingRequests->updateWriteIndex();
+            TTT_MEASURE(T2_OrderServer_LFQueue_write, (*_logger));
         }
         _pendingSize = 0;
     }

@@ -31,14 +31,22 @@ namespace exchange::order_server
 
             for (auto clientResponse = _outgoingResp->getNextToRead(); _outgoingResp->size() && clientResponse; clientResponse = _outgoingResp->getNextToRead())
             {
+                TTT_MEASURE(T5t_OrderServer_LFQueue_read, _logger);
+
                 auto& nextOutgoingSeqNum = _cidNextOutgoingSeqNum[clientResponse->_clientId];
                 _logger.log("%:% %() % Processing cid:% seq:% %\n",
                             __FILE__, __LINE__, __FUNCTION__, time::getCurrentTimeStr(&_timeStr), clientResponse->_clientId, nextOutgoingSeqNum, clientResponse->toString());
             
                 common::assert(_cidTcpSocket[clientResponse->_clientId] != nullptr, "Don't have a socket for client ID : " + std::to_string(clientResponse->_clientId));
+                START_MEASURE(Exchange_TCPSocket_send);
+
                 _cidTcpSocket[clientResponse->_clientId]->send(&nextOutgoingSeqNum, sizeof(nextOutgoingSeqNum));
                 _cidTcpSocket[clientResponse->_clientId]->send(clientResponse, sizeof(common::messages::ClientResponse));
+                END_MEASURE(Exchange_TCPSocket_send, _logger);
+
                 _outgoingResp->updateReadIndex();
+                TTT_MEASURE(T6t_OrderServer_TCP_write, _logger);
+
                 nextOutgoingSeqNum++;
             }
         }
@@ -59,6 +67,8 @@ namespace exchange::order_server
 
     void OrderServer::recvCallback(common::network::TCPSocket* socket, common::time::Nanos rxTime) noexcept
     {
+        TTT_MEASURE(T1_OrderServer_TCP_read, _logger);
+
         namespace msg = common::messages;
         _logger.log("%:% %() % Received socket:% len:% rx:%\n",
                     __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), socket->_fd, socket->_nextRcvValidIndex, rxTime);
@@ -95,7 +105,10 @@ namespace exchange::order_server
                     continue;
                 }
                 ++nextExpSeqNum;
+                START_MEASURE(Exchange_FIFOSequencer_addClientRequest);
+
                 _fifoSequencer.addClientRequest(rxTime, request->_clientRequest);
+                END_MEASURE(Exchange_FIFOSequencer_addClientRequest, _logger);
             }
             memcpy(socket->_rcvBuffer, socket->_rcvBuffer + i, socket->_nextRcvValidIndex - i);
             socket->_nextRcvValidIndex -= i;
@@ -104,6 +117,9 @@ namespace exchange::order_server
 
     void OrderServer::recvFinishedCallback() noexcept
     {
+        START_MEASURE(Exchange_FIFOSequencer_sequenceAndPublis);
+
         _fifoSequencer.sequenceAndPublish();
+        END_MEASURE(Exchange_FIFOSequencer_sequenceAndPublis, _logger);
     }
 } // namespace exchange::order_server

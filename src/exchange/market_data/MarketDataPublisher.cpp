@@ -27,13 +27,20 @@ namespace exchange::market_data
         _logger.log("%:% %() %\n", __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr));
         while (_run)
         {
+            TTT_MEASURE(T5_MarketDataPublisher_LFQueue_read, _logger);
+
             for (auto marketUpdate = _outgoingMdUpdates->getNextToRead(); _outgoingMdUpdates->size() && marketUpdate; marketUpdate = _outgoingMdUpdates->getNextToRead())
             {
+                START_MEASURE(Exchange_McastSocket_send);
                 _logger.log("%:% %() % Sending seq:% %\n", __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), _nextIncSeqNum, marketUpdate->toString().c_str());
-                
+
                 _incrementalSocket.send(&_nextIncSeqNum, sizeof(_nextIncSeqNum));
                 _incrementalSocket.send(marketUpdate, sizeof(MarketUpdate));
+                END_MEASURE(Exchange_McastSocket_send, _logger);
+                
                 _outgoingMdUpdates->updateReadIndex();
+                TTT_MEASURE(T6_MarketDataPublisher_UDP_write, _logger);
+                
                 auto nextWrite = _snapshotMdUpdates.getNextToWriteTo();
                 nextWrite->_seqNum = _nextIncSeqNum;
                 nextWrite->_marketUpdate = *marketUpdate;
