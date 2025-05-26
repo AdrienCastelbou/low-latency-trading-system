@@ -37,10 +37,16 @@ namespace trading::order_gateway
 
             for (auto clientRequest = _outgoingRequests->getNextToRead(); clientRequest; clientRequest = _outgoingRequests->getNextToRead())
             {
+                TTT_MEASURE(T11_OrderGateway_LFQueue_read, _logger);
                 _logger.log("%:% %() % sending cid:% seq:% %\n", __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), _clientId, _nextOutgoingSeqNum, clientRequest->toString());
+                
+                START_MEASURE(Trading_TCPSocket_send);
                 _tcpSocket.send(&_nextOutgoingSeqNum, sizeof(_nextOutgoingSeqNum));
                 _tcpSocket.send(clientRequest, sizeof(ClientRequest));
+                END_MEASURE(Trading_TCPSocket_send, _logger);
+
                 _outgoingRequests->updateReadIndex();
+                TTT_MEASURE(T12_OrderGateway_TCP_write, _logger);
                 _nextOutgoingSeqNum++;
             }
         }
@@ -48,6 +54,9 @@ namespace trading::order_gateway
 
     void OrderGateway::recvCallback(TCPSocket* socket, Nanos rxTime) noexcept
     {
+        TTT_MEASURE(T7t_OrderGateway_TCP_read, _logger);
+        START_MEASURE(Trading_OrderGateway_recvCallback);
+
         using namespace common::messages;
 
         _logger.log("%:% %() % Received socket:% len:% %\n", __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), socket->_fd, socket->_nextRcvValidIndex, rxTime);
@@ -75,10 +84,13 @@ namespace trading::order_gateway
                 auto nextWrite = _incomingResponses->getNextToWriteTo();
                 *nextWrite = std::move(response->_clientResponse);
                 _incomingResponses->updateWriteIndex();
+                TTT_MEASURE(T8t_OrderGateway_LFQueue_write, _logger);
             }
             memcpy(socket->_rcvBuffer, socket->_rcvBuffer + i, socket->_nextRcvValidIndex - i);
             socket->_nextRcvValidIndex -= i;
         }
+        END_MEASURE(Trading_OrderGateway_recvCallback, _logger);
+      
     }
 
 

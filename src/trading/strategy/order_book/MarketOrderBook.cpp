@@ -31,7 +31,10 @@ namespace trading::strategy::order_book
             case ADD:
             {
                 auto* order = _orderPool.allocate(marketUpdate->_orderId, marketUpdate->_side, marketUpdate->_price, marketUpdate->_qty, marketUpdate->_priority, nullptr, nullptr);
+                
+                START_MEASURE(Trading_MarketOrderBook_addOrder);
                 addOrder(order);
+                END_MEASURE(Trading_MarketOrderBook_addOrder, (*_logger));
             }
             break;
             case MODIFY:
@@ -43,7 +46,10 @@ namespace trading::strategy::order_book
             case CANCEL:
             {
                 auto* order = _oidToOrder[marketUpdate->_orderId];
+
+                START_MEASURE(Trading_MarketOrderBook_removeOrder);
                 removeOrder(order);
+                END_MEASURE(Trading_MarketOrderBook_removeOrder, (*_logger));
             }
             break;
             case TRADE:
@@ -86,7 +92,10 @@ namespace trading::strategy::order_book
             case SNAPSHOT_END:
             break;
         }
+
+        START_MEASURE(Trading_MarketOrderBook_updateBBO);
         updateBBO(bidUpdated, askUpdated);
+        END_MEASURE(Trading_MarketOrderBook_updateBBO, (*_logger));
 
         _tradeEngine->onOrderBookUpdate(marketUpdate->_tickerId, marketUpdate->_price, marketUpdate->_side, this);
         _logger->log("%:% %() % % %\n",

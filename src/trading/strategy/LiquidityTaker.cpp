@@ -44,6 +44,7 @@ namespace trading::strategy
 
             if (aggQtyRatio >= threshold)
             {
+                START_MEASURE(OrderManager_moveOrders);
                 if (marketUpdate->_side == Side::BUY)
                 {
                     _orderManager->moveOrders(marketUpdate->_tickerId, bbo->_askPrice, PRICE_INVALID, clip);
@@ -52,6 +53,7 @@ namespace trading::strategy
                 {
                     _orderManager->moveOrders(marketUpdate->_tickerId, PRICE_INVALID, bbo->_bidPrice, clip);
                 }
+                END_MEASURE(OrderManager_moveOrders, (*_logger));
             }
         }
     }
@@ -59,6 +61,9 @@ namespace trading::strategy
     {
         _logger->log("%:% %() % %\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), clientResponse->toString().c_str());
+        
+        START_MEASURE(Trading_OrderManager_onOrderUpdate);
         _orderManager->onOrderUpdate(clientResponse);
+        END_MEASURE(Trading_OrderManager_onOrderUpdate, (*_logger));
     }
 }

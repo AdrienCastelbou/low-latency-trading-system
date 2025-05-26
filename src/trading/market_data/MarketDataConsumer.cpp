@@ -21,6 +21,9 @@ namespace trading::market_data
 
     void MarketDataConsumer::recvCallback(common::network::McastSocket* socket) noexcept
     {
+        TTT_MEASURE(T7_MarketDataConsumer_UDP_read, _logger);
+        START_MEASURE(Trading_MarketDataConsumer_recvCallback);
+
         const auto isSnapshot = socket->_fd == _snapshotMcastSocket._fd;
 
         if (isSnapshot && !_inRecovery) [[ unlikely ]]
@@ -57,12 +60,14 @@ namespace trading::market_data
                     auto nextWrite = _incomingMdUpdates->getNextToWriteTo();
                     *nextWrite = std::move(request->_marketUpdate);
                     _incomingMdUpdates->updateWriteIndex();
+                    TTT_MEASURE(T8_MarketDataConsumer_LFQueue_write, _logger);
                 }
             }
             memcpy(socket->_inboundData.data(), socket->_inboundData.data() + i, socket->_nextRcvValidIndex - i);
 
             socket->_nextRcvValidIndex -= i;
         }
+        END_MEASURE(Trading_MarketDataConsumer_recvCallback, _logger);
     }
 
     void MarketDataConsumer::startSnapshotSync()

@@ -71,6 +71,7 @@ namespace trading::strategy
         {
             for (auto clientResponse = _incomingOgwResponses->getNextToRead(); clientResponse; clientResponse = _incomingOgwResponses->getNextToRead())
             {
+                TTT_MEASURE(T9t_TradeEngine_LFQueue_read, _logger);
                 _logger.log("%:% %() % Processing %\n",
                             __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), clientResponse->toString().c_str());
                 onOrderUpdate(clientResponse);
@@ -80,6 +81,7 @@ namespace trading::strategy
 
             for (auto marketUpdate = _incomingMdUpdates->getNextToRead(); marketUpdate; marketUpdate = _incomingMdUpdates->getNextToRead())
             {
+                TTT_MEASURE(T9_TradeEngine_LFQueue_read, _logger);
                 _logger.log("%:% %() % Processing %\n",
                             __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), marketUpdate->toString().c_str());
                 assert(marketUpdate->_tickerId < _tickerOrderBook.size(), "Unknown tickerId to update " + marketUpdate->toString());
@@ -95,9 +97,18 @@ namespace trading::strategy
         _logger.log("%:% %() % ticker:% price:% side:%\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), tickerId, priceToString(price).c_str(), sideToString(side).c_str());
         const auto bbo = book->getBBO();
+
+        START_MEASURE(Trading_PositionKeeper_updateBBO);
         _positionKeeper.updateBBO(tickerId, bbo);
+        END_MEASURE(Trading_PositionKeeper_updateBBO, _logger);
+        
+        START_MEASURE(Trading_FeatureEngine_onOrderBookUpdate);
         _featureEngine.onOrderBookUpdate(tickerId, price, side, book);
+        END_MEASURE(Trading_FeatureEngine_onOrderBookUpdate, _logger);
+        
+        START_MEASURE(Trading_TradeEngine_algoOnOrderBookUpdate_);
         _algoOnOrderBookUpdate(tickerId, price, side, book);
+        END_MEASURE(Trading_TradeEngine_algoOnOrderBookUpdate_, _logger);
     }
 
 
@@ -105,8 +116,14 @@ namespace trading::strategy
     {
         _logger.log("%:% %() % %\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), marketUpdate->toString().c_str());
+        
+        START_MEASURE(Trading_FeatureEngine_onTradeUpdate);
         _featureEngine.onTradeUpdate(marketUpdate, book);
+        END_MEASURE(Trading_FeatureEngine_onTradeUpdate, _logger);
+        
+        START_MEASURE(Trading_TradeEngine_algoOnTradeUpdate_);
         _algoOnTradeUpdate(marketUpdate, book);
+        END_MEASURE(Trading_TradeEngine_algoOnTradeUpdate_, _logger);
     }
 
     void TradeEngine::onOrderUpdate(const ClientResponse* clientResponse) noexcept
@@ -118,10 +135,15 @@ namespace trading::strategy
         
         if (clientResponse->_type == ClientResponseType::FILLED) [[ unlikely ]]
         {
+            START_MEASURE(Trading_PositionKeeper_addFill);
             _positionKeeper.addFill(clientResponse);
+            END_MEASURE(Trading_PositionKeeper_addFill, _logger);
         }
+        START_MEASURE(Trading_TradeEngine_algoOnOrderUpdate_);
         _algoOnOrderUpdate(clientResponse);
+        END_MEASURE(Trading_TradeEngine_algoOnOrderUpdate_, _logger);
     }
+
     void TradeEngine::sendClientRequest(const ClientRequest* clientRequest) noexcept
     {
         _logger.log("%:% %() % Sending %\n",
@@ -129,6 +151,7 @@ namespace trading::strategy
         auto nextWrite = _outgoingOgwRequests->getNextToWriteTo();
         *nextWrite = std::move(*clientRequest);
         _outgoingOgwRequests->updateWriteIndex();
+        TTT_MEASURE(T10_TradeEngine_LFQueue_write, _logger);
     }
 
     void TradeEngine::initLastEventTime() noexcept

@@ -39,7 +39,9 @@ namespace trading::strategy
             const auto bidPrice     = bbo->_bidPrice - (fairPrice - bbo->_bidPrice >= threshold ? 0 : 1);
             const auto askPrice     = bbo->_askPrice + (bbo->_askPrice - fairPrice >= threshold? 0 : 1);
 
+            START_MEASURE(Trading_OrderManager_moveOrders);
             _orderManager->moveOrders(tickerId, bidPrice, askPrice, clip);
+            END_MEASURE(Trading_OrderManager_moveOrders, (*_logger));
         }
     }
 
@@ -54,7 +56,10 @@ namespace trading::strategy
     {
         _logger->log("%:% %() % %\n",
                     __FILE__, __LINE__, __FUNCTION__, getCurrentTimeStr(&_timeStr), clientResponse->toString().c_str());
+        
+        START_MEASURE(Trading_OrderManager_onOrderUpdate);
         _orderManager->onOrderUpdate(clientResponse);
+        END_MEASURE(Trading_OrderManager_onOrderUpdate, (*_logger));
     }
 
 }

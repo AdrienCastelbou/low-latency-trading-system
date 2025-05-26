@@ -23,9 +23,14 @@ namespace trading::strategy::order_management
     void OrderManager::moveOrders(TickerId tickerId, Price bidPrice, Price askPrice, Qty clip) noexcept
     {
         auto bidOrder = &(_tickerSideOrder.at(tickerId).at(sideToIndex(Side::BUY)));
+        START_MEASURE(Trading_OrderManager_BUY_moveOrder);
         moveOrder(bidOrder, tickerId, bidPrice, Side::BUY, clip);
+        END_MEASURE(Trading_OrderManager_BUY_moveOrder, (*_logger));
+        
         auto askOrder = &(_tickerSideOrder.at(tickerId).at(sideToIndex(Side::SELL)));
+        START_MEASURE(Trading_OrderManager_SELL_moveOrder);
         moveOrder(askOrder, tickerId, askPrice, Side::SELL, clip);
+        END_MEASURE(Trading_OrderManager_SELL_moveOrder, (*_logger));
     }
 
 
@@ -38,7 +43,9 @@ namespace trading::strategy::order_management
             {
                 if (order->_price != price || order->_qty != qty)
                 {
+                    START_MEASURE(Trading_OrderManager_cancelOrder);
                     cancelOrder(order);
+                    END_MEASURE(Trading_OrderManager_cancelOrder, (*_logger));
                 }
             }
             break;
@@ -47,11 +54,15 @@ namespace trading::strategy::order_management
             {
                 if (price != PRICE_INVALID) [[ likely ]]
                 {
+                    START_MEASURE(Trading_RiskManager_checkPreTradeRisk);
                     const auto riskResult = _riskManager.checkPreTradeRisk(tickerId, side, qty);
+                    END_MEASURE(Trading_RiskManager_checkPreTradeRisk, (*_logger));
 
                     if (riskResult == rm::RiskCheckResult::ALLOWED) [[ likely ]]
                     {
+                        START_MEASURE(Trading_OrderManager_newOrder);
                         newOrder(order, tickerId, price, side, qty);
+                        END_MEASURE(Trading_OrderManager_newOrder, (*_logger));
                     }
                     else
                     {
