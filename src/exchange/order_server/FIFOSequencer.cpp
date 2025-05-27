@@ -26,15 +26,19 @@ namespace exchange::order_server
         {
             return ;
         }
+#if !defined(NDEBUG)
         _logger->log("%:% %() % Processing % requests.\n",
                     __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), _pendingSize);
-            
+#endif
+
         std::sort(_pendingClientRequests.begin(), _pendingClientRequests.begin() + _pendingSize);
         for (size_t i = 0; i < _pendingSize; i++)
         {
             const auto& clientRequest = _pendingClientRequests.at(i);
+#if !defined(NDEBUG)
             _logger->log("%:% %() % Writing RX:% Req:% to FIFO.\n",
                         __FILE__, __LINE__, __FUNCTION__, common::time::getCurrentTimeStr(&_timeStr), clientRequest._recvTime, clientRequest._request.toString());
+#endif
             auto* nextWrite = _incomingRequests->getNextToWriteTo();
             *nextWrite = std::move(clientRequest._request);
             _incomingRequests->updateWriteIndex();

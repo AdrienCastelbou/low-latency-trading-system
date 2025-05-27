@@ -13,7 +13,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -Werror -Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -Werror -Wall -Wextra")
 
 set(CMAKE_CPP_COMPILER g++)
-set(CMAKE_BUILD_TYPE Debug)
+#set(CMAKE_BUILD_TYPE Debug)
 
 # Common library
 file(GLOB_RECURSE COMMON_SOURCES "src/common/*.cpp")

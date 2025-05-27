@@ -17,6 +17,7 @@ namespace common::logging
             unsigned long long ull;
             float f;
             double d;
+            char s[256];
         } _u;
     };
     

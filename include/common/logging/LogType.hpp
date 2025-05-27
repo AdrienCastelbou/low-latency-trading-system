@@ -13,6 +13,7 @@ namespace common::logging
         UNSIGNED_LONG_INTEGER = 5,
         UNSIGNED_LONG_LONG_INTEGER = 6,
         FLOAT = 7,
-        DOUBLE = 8
+        DOUBLE = 8,
+        STRING = 9
     };
 } // namespace common::log

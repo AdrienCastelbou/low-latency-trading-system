@@ -3,3 +3,4 @@ build
 *.log
 notebooks
 venv
+log_old

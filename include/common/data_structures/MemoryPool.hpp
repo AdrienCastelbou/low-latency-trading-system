@@ -42,7 +42,9 @@ namespace common::data_structures
     {
         auto objBlock = &_data[_nextFreeIdx];
 
+#if !defined(NDEBUG)
         common::assert(objBlock->_isFree, "Expected free ObjectBlock at index:" + std::to_string(_nextFreeIdx));
+#endif
         T* obj = &(objBlock->_object);
         obj = new(obj) T(args...);
         objBlock->_isFree = false;
@@ -73,8 +75,10 @@ namespace common::data_structures
     void MemoryPool<T>::deallocate(T* obj)
     {
         const auto objIndex = reinterpret_cast<ObjBlock*>(obj) - &_data[0];
+#if !defined(NDEBUG)
         common::assert(objIndex >= 0 && static_cast<size_t>(objIndex) < _data.size(), "Element being deallocated does not belong to this Memory pool.");
         common::assert(!_data[objIndex]._isFree, "Expected in-use ObjectBlock at index:" + std::to_string(objIndex));
+#endif
         _data[objIndex]._isFree = true;
     }
 

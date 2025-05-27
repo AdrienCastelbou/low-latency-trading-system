@@ -61,6 +61,9 @@ namespace common::logging
                 case LogType::DOUBLE:
                     _file << next->_u.d;
                     break;
+                case LogType::STRING:
+                    _file << next->_u.s;
+                    break;
                 }
 
                 _queue.updateReadIndex();
@@ -83,11 +86,9 @@ namespace common::logging
 
     void Logger::pushValue(const char* value) noexcept
     {
-        while (*value)
-        {
-            pushValue(*value);
-            value++;
-        }
+        LogElement l{LogType::STRING, {.s = {}}};
+        strncpy(l._u.s, value, sizeof(l._u.s) - 1);
+        pushValue(l);
     }
 
     void Logger::pushValue(const char value) noexcept
